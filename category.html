@@ -1,0 +1,95 @@
+
+<h1 class="category-name">
+    <span>{$category.name|escape}</span>
+</h1>
+
+<!-- plugin hook: 'frontend_category' -->
+{* @event frontend_category.%plugin_id% *}
+{foreach $frontend_category as $_}{$_}{/foreach}
+
+
+<!-- description -->
+{if $category.description}
+<div class="row_category clearfix">{$category.description}</div>
+{/if}
+
+<!-- subcategories -->
+{if $category.subcategories}
+<div class="titled_box" id="subcategories">
+    <h2>Подкатегории</h2>
+    <ul class="row">
+        {foreach $category.subcategories as $sc}
+        <li class="categories_box col-xs-4 col-sm-3 col-md-3 col-lg-2">
+            <a title="Lorem ipsum dolor sit amet" href="{$sc.url}" class="lnk_more_sub"><i class="icon-caret-right "></i>{$sc.name|escape}</a>
+        </li>
+        {/foreach}
+    </ul>
+</div>
+{/if}
+
+
+<div class="sortPagiBar shop_box_row shop_box_row clearfix">
+
+    <script type="text/javascript">
+        //<![CDATA[
+        $(document).ready(function() {
+            $('#productsSortForm .selectProductSort, .nb_item').uniform();
+        });
+        //]]>
+    </script>     
+    <ul class="product_view clearfix hidden-xs">
+        <li id="product_view_grid" class="current "><i class="icon-th-large"></i></li>
+        <li id="product_view_list" class=""><i class="icon-th-list"></i></li>
+    </ul>
+    <form id="productsSortForm" action="#" class="nbrItemPage productsSortForm">
+        <label for="selectPrductSort">Сортировать по</label>
+        <select id="selectPrductSort" class="selectProductSort">
+            <option value="position:asc" selected="selected">--</option>
+            <option value="price:asc" >Цена, по возрастанию</option>
+            <option value="price:desc" >Цена, по убыванию</option>
+            <option value="name:asc" >По названию товара, от А до Я</option>
+            <option value="name:desc" >По названию товара, от Я до А</option>
+            <option value="quantity:desc" >По наличию</option>
+            <option value="reference:asc" >Артикул, по возрастанию</option>
+            <option value="reference:desc" >Артикул, по возрастанию</option>
+        </select>
+
+    </form>
+    <!-- /Sort products -->
+
+
+    <!-- nbr product/page -->
+    <form action="#" method="get" class="nbrItemPage nbr_page">
+
+        <label for="nb_item">Показать:</label>
+        <input type="hidden" name="id_lang" value="3" />
+        <input type="hidden" name="id_category" value="3" />
+        <input type="hidden" name="controller" value="category" />
+        <select name="n" id="nb_item" class="js-nb_item nb_item" onchange="this.form.submit();">
+            <option value="6" selected="selected">6</option>
+            <option value="10" >10</option>
+            <option value="20" >20</option>
+            <option value="50" >50</option>
+        </select>
+
+
+    </form>
+    <!-- /nbr product/page -->
+
+</div>
+
+<div id="product-list">
+    {if !$products}
+    {if !empty($filters)}
+    [`No products were found.`]
+    {else}
+    [`This category does not contain any products.`]
+    {/if}
+    {else}
+    {include file='list-thumbs.html' sorting=!empty($category.params.enable_sorting)}
+    {*
+    or use the line below to change product list view
+    {include file='list-table.html' sorting=!empty($category.params.enable_sorting)}
+    *}
+    {/if}
+</div>

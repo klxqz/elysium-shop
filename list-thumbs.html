@@ -1,0 +1,133 @@
+<!-- products thumbnail list view -->
+
+{if !empty($sorting)}
+<!-- sorting -->
+{$sort_fields = ['rating' => '[`Customer rating`]', 'total_sales' => '[`Bestsellers`]', 'price' => '[`Price`]', 'name' => '[`Name`]', 'create_datetime'=>'[`Date added`]', 'stock' => '[`In stock`]']}
+{if !isset($active_sort)}
+{$active_sort = $wa->get('sort', 'create_datetime')}
+{/if}
+<ul class="menu-h sorting">
+    <li>[`Sort by`]:</li>
+    {if !empty($category) && !$category.sort_products}
+    <li{if !$active_sort} class="selected"{/if}><a href="{$wa->currentUrl(0, 1)}">[`New & Popular`]</a></li>
+    {/if}
+    {foreach $sort_fields as $sort => $name}
+    <li{if $active_sort == $sort} class="selected"{/if}>{$wa->shop->sortUrl($sort, $name, $active_sort)}</li>
+    {if $wa->get('sort') == $sort}{$wa->title( $wa->title()|cat:' — '|cat:$name)}{/if}
+    {/foreach}
+</ul>
+{/if}
+
+
+<ul id="product_list" class="row grid product-list">
+    {foreach $products as $p name=products}
+    <li itemscope itemtype ="http://schema.org/Product" class="ajax_block_product col-xs-12 col-sm-6 col-md-4 col-lg-4 {if $smarty.foreach.products.index % 3 == 0}alpha{elseif ($smarty.foreach.products.index+1) % 3 == 0}omega{/if}">
+        <div class="inner_content clearfix">
+            <a href="{$p.frontend_url}" title="{$p.name}{if $p.summary} &mdash; {strip_tags($p.summary)}{/if}" class="product_img_link">
+                {$badge_html = $wa->shop->badgeHtml($p.badge)}
+                {if $badge_html}
+                <div class="corner top right">{$badge_html}</div>
+                {/if}
+                {$wa->shop->productImgHtml($p, '200', ['itemprop' => 'image', 'alt' => $p.name, 'default' => "`$wa_theme_url`img/dummy200.png"])}
+            </a>
+            <div class="center_block">
+                <div class="label-box">
+                </div>
+                <div class="product_flags clearfix">
+                    <span class="availability title_shop">В наличии</span>				                  
+                </div>
+                <div class="clear"></div>
+                <h5 itemprop="name">
+                    <a title="{$p.name}{if $p.summary} &mdash; {strip_tags($p.summary)}{/if}" href="{$p.frontend_url}" class="product_link">{$p.name}</a>
+                </h5>
+                {if $p.rating > 0}
+                <span class="rating nowrap">{$wa->shop->ratingHtml($p.rating)}</span>
+                {/if}
+
+                {if $p.summary}
+                <p class="product_desc" itemprop="description">{$p.summary}</p>
+                {/if}
+
+            </div>																				 
+            <div class="right_block" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                <span class="price" itemprop="price">{shop_currency_html($p.price)}</span>  
+
+                <p class="compare checkbox choices-thin clearfix hidden-xs">		
+                    <input type="checkbox" class="comparator" id="comparator_item_1" value="comparator_item_1"  autocomplete="off"/> 
+                    <label for="comparator_item_1">Выбрать для сравнения</label>
+                </p>
+
+                <div class="clear noneclass"></div>
+
+                {if $wa->shop->settings('ignore_stock_count') || $p.count === null || $p.count > 0}
+                <form class="addtocart" {if $p.sku_count > 1}data-url="{$p.frontend_url}?cart=1"{/if} method="post" action="{$wa->getUrl('/frontendCart/add')}">
+                    <input type="hidden" name="product_id" value="{$p.id}">
+                    <input type="submit" value="[`Add to cart`]" class="ajax_add_to_cart_button btn btn-default exclusive btn_add_cart">
+                    <a title="Подробнее" href="{$p.frontend_url}" class="btn btn-default button">Подробнее</a> 
+                </form>
+                <link itemprop="availability" href="http://schema.org/InStock" />
+                {else}
+                <link itemprop="availability" href="http://schema.org/OutOfStock" />
+                {/if}         
+            </div>
+        </div>
+    </li>
+
+
+    {/foreach}
+</ul>
+
+{if isset($pages_count) && $pages_count > 1}
+<div class="block lazyloading-paging">
+    {wa_pagination total=$pages_count attrs=['class' => "menu-h"]}
+</div>
+{/if}
+
+
+<script>
+    (function($) {
+        $(function() {
+            function createCookie(name, value, days) {
+                if (days) {
+                    var date = new Date();
+                    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+                    var expires = "; expires=" + date.toGMTString();
+                }
+                else
+                    var expires = "";
+                document.cookie = name + "=" + value + expires + "; path=/";
+            }
+            function readCookie(name) {
+                var nameEQ = name + "=";
+                var ca = document.cookie.split(';');
+                for (var i = 0; i < ca.length; i++) {
+                    var c = ca[i];
+                    while (c.charAt(0) == ' ')
+                        c = c.substring(1, c.length);
+                    if (c.indexOf(nameEQ) == 0)
+                        return c.substring(nameEQ.length, c.length);
+                }
+                return null;
+            }
+            function eraseCookie(name) {
+                createCookie(name, "", -1);
+            }
+            $('ul.product_view').each(function(i) {
+                var cookie = readCookie('tabCookie' + i);
+                if (cookie)
+                    $(this).find('li').eq(cookie).addClass('current').siblings().removeClass('current')
+                            .parents('#center_column').find('#product_list').addClass('list').removeClass('grid').eq(cookie).addClass('grid').removeClass('list');
+            })
+            $('ul.product_view').delegate('li:not(.current)', 'click', function(i) {
+                $(this).addClass('current').siblings().removeClass('current')
+                        .parents('#center_column').find('#product_list').removeClass('grid').addClass('list').eq($(this).index()).addClass('grid').removeClass('list')
+                var cookie = readCookie('tabCookie' + i);
+                if (cookie)
+                    $(this).find('#product_list').eq(cookie).removeClass('grid').addClass('list').siblings().removeClass('list')
+                var ulIndex = $('ul.product_view').index($(this).parents('ul.product_view'));
+                eraseCookie('tabCookie' + ulIndex);
+                createCookie('tabCookie' + ulIndex, $(this).index(), 365);
+            })
+        })
+    })(jQuery)
+</script>
