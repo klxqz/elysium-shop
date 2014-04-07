@@ -1,202 +1,406 @@
 <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-plugins/jquery.cookie.js"></script>
 
-<div itemscope itemtype="http://schema.org/Product">
-    
-    <h1 itemprop="name">
-        {$product.name|escape}
-        {if !empty($product.rating) && $product.rating > 0}
-        <span class="rating nowrap" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating" title="{sprintf('[`Average user rating: %s / 5`]', $product.rating)}">
-            {$wa->shop->ratingHtml($product.rating, 16)}
-            <span itemprop="ratingValue" style="display: none;">{$product.rating}</span>
-            <span itemprop="reviewCount" style="display: none;">{$reviews_total_count}</span>
-        </span>
-        {/if}   
-    </h1>
-    
-    <!-- product page navigation -->
-    <ul class="menu-h">
-        <li class="selected"><a href="{$wa->shop->productUrl($product)}">[`Overview`]</a></li>
-        <li>
-            <a href="{$wa->shop->productUrl($product, 'reviews')}">[`Reviews`]</a>
-            <span class="hint">{$reviews_total_count}</span>
-        </li>
-        {foreach $product.pages as $page}
-            <li><a href="{$wa->shop->productUrl($product, 'page', ['page_url' => $page.url])}">{$page.name|escape}</a></li>
-        {/foreach}
-        
-        <!-- plugin hook: 'frontend_product.menu' -->
-        {* @event frontend_product.%plugin_id%.menu *}
-        {foreach $frontend_product as $_}{$_.menu}{/foreach}
-    
-    </ul>
-    
-    <div class="clear-left"></div>
-    
-    <!-- SIDEBAR -->
-    <div class="sidebar right300px">
-    
-        <div class="cart" id="cart-flyer">
-            <!-- add to cart -->
-            {include file="product.cart.html" inline}
-            <!-- compare -->
-            <div>
-                <a {if $compare}style="display:none"{/if} class="compare-add inline-link" data-product="{$product.id}" href="#"><b><i>[`Add to comparison table`]</i></b></a>
-                <a {if !$compare}style="display:none"{/if} class="compare-remove inline-link" data-product="{$product.id}" href="#"><b><i>[`Remove from comparison table`]</i></b></a>
-                <a id="compare-link" {if count($compare) lt 2}style="display:none"{/if} rel="nofollow" href="{$wa->getUrl('/frontend/compare/', ['id' => implode(',', $compare) ])}" class="bold">[`Compare`] <span class="count">{count($compare)}</span></a>
+
+
+<div id="primary_block" class="clearfix">
+    <!--ADD CUSTOM CLOUD ZOOM!!!-->
+    <!-- Call quick start function. -->
+    <!-- right infos-->
+    <div class="row">
+        <div id="pb-right-column" class="col-xs-12 col-sm-5">
+            <h1 itemprop="name" class="pb-right-colum-h">{$product.name|escape}</h1>
+
+
+            <!-- product img-->
+            <div id="image-block">
+                <span id="view_full_size">
+                    <a id="zoom1" rel="position: 'inside' , showTitle: false, adjustX:0, adjustY:0" class="cloud-zoom" href="{shopImage::getUrl(['id' => $product.image_id, 'product_id' => $product.id, 'ext' => $product.ext], '900', false)}">
+                        {$wa->shop->productImgHtml($product, '400', [ 'itemprop' => 'image', 'id' => 'bigpic', 'alt' => $product.name|escape|cat:' ':strip_tags($product.summary)|escape ])}
+                        <span class="mask"></span>
+                    </a>
+                </span>
             </div>
-            
-            <!-- plugin hook: 'frontend_product.cart' -->
-            {* @event frontend_product.%plugin_id%.cart *}
-            {foreach $frontend_product as $_}{$_.cart}{/foreach}
-            
-        </div>
-    
-        <div class="aux">
-    
-            <!-- categories -->
-            {if $product.categories}
-                <p id="product-categories">
-                [`Categories`]:
-                    {foreach $product.categories as $c}{if $c.status}
-                        <br>
-                        <span class="product-info"><a href="{$wa->getUrl('/frontend/category', ['category_url' => $c.full_url])}">{$c.name|escape}</a></span>
-                    {/if}{/foreach}
-                </p>
-            {/if}
-    
-            <!-- tags -->
-            {if $product.tags}
-                <p class="tags" id="product-tags">
-                    [`Tags`]:
-                    <span class="product-info">
-                    {foreach $product.tags as $t}
-                        <a href="{$wa->getUrl('/frontend/tag', ['tag' => urlencode($t)])}">{$t}</a>
-                    {/foreach}
-                    </span>
-                </p>
-            {/if}
-    
-            <!-- plugin hook: 'frontend_product.block_aux' -->
-            {* @event frontend_product.%plugin_id%.block_aux *}
-            {foreach $frontend_product as $_}{$_.block_aux}{/foreach}    
-        
-        </div>
-        
-    </div>
-    
-    <!-- PRODUCT INFO -->
-    <div class="content right300px">
-    
-        <div class="product-page" id="overview">
-        
-            <!-- image gallery -->
-            <div class="align-center">
-                <!-- main image -->
-                <div class="image">
-                    {if $product.images}
-                    <div class="corner top right">
-                        {$wa->shop->badgeHtml($product.badge)}
-                    </div>
-                    {/if}
-                    {$wa->shop->productImgHtml($product, '750x0', [ 'itemprop' => 'image', 'id' => 'product-image', 'alt' => $product.name|escape|cat:' ':strip_tags($product.summary)|escape ])}
-                </div>
-                <!-- gallery -->
-                {if count($product.images) > 1}
-                    <div class="gallery" id="product-gallery">
+
+            <!-- thumbnails -->
+            <div id="views_block" >
+                <a id="view_scroll_left"  title="Другие виды" href="javascript:{}">Предыдущая</a>		
+                <div id="thumbs_list">
+                    <ul id="thumbs_list_frame">
                         {foreach $product.images as $image}
-                            <div class="image">                    
-                                <a id="product-image-{$image.id}" href="#">{$wa->shop->productImgHtml(['id'=> $product.id, 'image_id' => $image.id, 'ext' => $image.ext, 'image_desc' => $image.description], '96x96', ['alt' => $product.name|cat:' - ':$image.description|escape])}</a>
-                            </div>
-                        {/foreach}
-                    </div>
-                {/if}
-            </div>
-            
-            <div class="clear-left"></div>
-            
-            <!-- plugin hook: 'frontend_product.block' -->
-            {* @event frontend_product.%plugin_id%.block *}
-            {foreach $frontend_product as $_}{$_.block}{/foreach}
-    
-            {if $product.description}
-                <div class="description" id="product-description" itemprop="description">{$product.description}</div>
-            {/if}
-    
-            <!-- product features -->
-            {if $product.features}
-                <table class="features" id="product-features">
-                    {foreach $product.features as $f_code => $f_value}
-                        <tr{if $features[$f_code].type == 'divider'} class="divider"{/if}>
-                            <td class="name">
-                                {$features[$f_code].name|escape}
-                            </td>
-                            <td class="value" itemprop="{$f_code|escape}">
-                                {if is_array($f_value)}
-                                    {if $features[$f_code].type == 'color'}
-                                        {implode('<br /> ', $f_value)}
-                                    {else}
-                                        {implode(', ', $f_value)}
-                                    {/if}
-                                {else}
-                                    {$f_value}
-                                {/if}
-                            </td>
-                        </tr>
-                    {/foreach}
-                </table>
-            {/if}
-    
-            <!-- product reviews -->
-            <div class="reviews">
-                <h3>{sprintf('[`%s reviews`]', $product.name|escape)}</h3>
-                <ul class="menu-v with-icons">
-                    {foreach $reviews as $review}
-                        <li data-id={$review.id} data-parent-id="0">
-                            {include file="review.html" reply_allowed=false inline}
+                        <li id="thumbnail_{$image.id}">
+                            <a href="{shopImage::getUrl(['id' => $image.id, 'product_id' => $product.id, 'ext' => $image.ext], '900', false)}" class="cloud-zoom-gallery" rel="useZoom: 'zoom1', smallImage: '{shopImage::getUrl(['id' => $image.id, 'product_id' => $product.id, 'ext' => $image.ext], '400', false)}'">
+                                <img id="thumb_{$image.id}" src="{shopImage::getUrl(['id' => $image.id, 'product_id' => $product.id, 'ext' => $image.ext], '70x70', false)}" alt="Extra-Large Madison Satchel"  />
+
+                            </a>
                         </li>
-                    {/foreach}
-                </ul>
-                {if !$reviews}
-                    <p>{sprintf('[`Be the first to <a href="%s">write a review</a> of this product!`]', 'reviews/')}</p>
-                {else}
-                    {sprintf(_w(
-                            'Read <a href="%s">all %d review</a> on %s', 
-                            'Read <a href="%s">all %d reviews</a> on %s', 
-                            $reviews_total_count, false
-                        ), 'reviews/', $reviews_total_count, $product.name|escape)
-                    }
-                {/if}
+                        {/foreach}
+
+                    </ul>
+                </div>
+                <a id="view_scroll_right" title="Другие виды" href="javascript:{}">Следующая</a>		
             </div>
-            
+            <p class="resetimg">
+                <span id="wrapResetImages" style="display:none;">
+                    <i class="icon-reply"></i>
+                    <a id="resetImages" href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=1&amp;controller=product&amp;id_lang=3" onclick="$('span#wrapResetImages').hide('slow');
+                            return (false);">Показать все фотографии</a>
+                </span>
+            </p>
+
+            <ul id="usefull_link_block" class="clearfix" >
+                <li id="left_share_fb">
+                    <a href="http://www.facebook.com/sharer.php?u=http%3A%2F%2Flivedemo00.template-help.com%2Fprestashop_47744%2Findex.php%3Fid_product%3D1%26controller%3Dproduct%26id_lang%3D3&amp;t=Extra-Large+Madison+Satchel" class="js-new-window"><i class="icon-facebook-sign"></i>Share on Facebook</a>
+                </li>
+
+                <li id="favoriteproducts_block_extra_added" class="favorite">
+                    <i class="icon-heart"></i>Удалите этот товар из моего избранного
+                </li>
+                <li id="favoriteproducts_block_extra_removed" class="favorite">
+                    <i class="icon-heart-empty"></i>Добавьте этот товар к моему избранному
+                </li>
+                <li class="sendtofriend">
+                    <a id="send_friend_button" href="#send_friend_form"><i class="icon-envelope"></i>Отправить другу</a>
+                </li>
+
+
+                <li class="print"><a href="javascript:print();"><i class="icon-print"></i>Распечатать</a></li>
+            </ul>  
+        </div>
+        <!-- left infos-->
+        <div id="pb-left-column" class="col-xs-12 col-sm-7">
+            <h1>{$product.name|escape}</h1>
+            {if !empty($product.rating) && $product.rating > 0}
+            <span class="rating nowrap" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating" title="{sprintf('[`Average user rating: %s / 5`]', $product.rating)}">
+                {$wa->shop->ratingHtml($product.rating, 16)}
+                <span itemprop="ratingValue" style="display: none;">{$product.rating}</span>
+                <span itemprop="reviewCount" style="display: none;">{$reviews_total_count}</span>
+            </span>
+            {/if}
+
+            {if $product.description}
+            <div itemprop="description" id="short_description_block">
+                <div id="short_description_content" class="rte align_justify">
+                    {$product.description}
+                </div>
+            </div>
+            {/if}
+
+
+
+            <!-- add to cart form-->
+            <form id="buy_block"  action="http://livedemo00.template-help.com/prestashop_47744/index.php?controller=cart" method="post">
+
+
+                <div class="product_attributes">
+
+                    <div class="row-3">
+
+
+                        <!-- availability -->
+                        <p id="availability_statut" style="display: none;">
+                            <span id="availability_label">Наличие:</span>
+                            <span id="availability_value">
+                            </span>
+                        </p>
+
+                        <!-- number of item in stock -->
+                        <p id="pQuantityAvailable"> 
+                            <span id="quantityAvailable">97</span>
+
+                            <span  id="quantityAvailableTxtMultiple">шт в наличии</span>
+                        </p>
+
+
+
+
+                        <p id="product_reference" style="display: none;"> 
+                            <label>Артикул: </label>
+                            <span class="editable"></span>
+                        </p>
+                    </div>
+
+
+
+                </div>
+                <div class="content_prices clearfix">
+                    <!-- prices -->
+
+
+                    <div class="row_1">
+                        <p class="our_price_display">
+                            <span  id="our_price_display">$12.96</span>
+                            <!---->
+                        </p>
+
+                        <p id="add_to_cart" class="buttons_bottom_block">
+
+                            <a class="exclusive button btn btn-default btn_add_cart" href="javascript:document.getElementById('add2cartbtn').click();"> <span>Добавить в корзину  </span></a>
+                            <input id="add2cartbtn" type="submit" name="Submit" value="Добавить в корзину" />
+                            <!--show when "This product is no longer in stock with those attributes but is available with others"-->
+                            <span class="exclusive btn btn-default disabled" style="display:none;">
+                                <span></span>
+                                Добавить в корзину
+                            </span>
+                        </p>
+                        <!-- quantity wanted -->
+                        <p id="quantity_wanted_p">
+                            <label>Количество:</label>
+                            <a href="#" class="product_quantity_down button btn btn-default" rel="qty"><i class="icon-minus"></i></a>
+                            <input type="text" name="qty" id="quantity_wanted" class="form-control" value="1" size="2" maxlength="3"  />
+                            <a href="#" class="product_quantity_up button btn btn-default" rel="qty"><i class="icon-plus"></i></a>
+
+                        </p>
+                    </div>
+
+                    <div class="other-prices">
+
+                        <p class="pack_price">вместо <span class="price price-old">$171.61</span></p>
+                    </div>
+                </div>
+
+                <p class="buttons_bottom_block">
+                    <a href="#" id="wishlist_button" class="btn btn-default" onclick="WishlistCart('wishlist_block_list', 'add', '1', $('#idCombination').val(), document.getElementById('quantity_wanted').value);
+                            return false;"  title="Добавить в список" rel="nofollow"><i class="icon-heart-empty"></i>Добавить в список</a>
+                </p>
+
+                <!-- Out of stock hook -->
+                <p id="oosHook" style="display: none;">
+
+
+                <div id="product_comments_block_extra" class="panel">
+                    <div class="comments_note panel-heading clearfix">
+                    </div>
+                    <div class="comments_advices panel-body">
+                        <a class="open-comment-form"  href="#new_comment_form"><i class="icon-pencil"></i> Напишите свой обзор</a>
+                    </div>
+                </div>
+                <!--  /Module ProductComments -->
+
+                </p>
+
+
+
+            </form>
+
+            <div id="ShareDiv" class="addsharethis">
+                <script type="text/javascript">(function() {
+                        if (window.pluso)
+                            if (typeof window.pluso.start == "function")
+                                return;
+                        if (window.ifpluso == undefined) {
+                            window.ifpluso = 1;
+                            var d = document, s = d.createElement('script'), g = 'getElementsByTagName';
+                            s.type = 'text/javascript';
+                            s.charset = 'UTF-8';
+                            s.async = true;
+                            s.src = ('https:' == window.location.protocol ? 'https' : 'http') + '://share.pluso.ru/pluso-like.js';
+                            var h = d[g]('body')[0];
+                            h.appendChild(s);
+                        }
+                    })();</script>
+                <div class="pluso" data-background="#ebebeb" data-options="big,square,line,horizontal,counter,theme=06" data-services="vkontakte,odnoklassniki,facebook,twitter,google,moimir,email,print"></div>
+            </div>
+
+
+
         </div>
     </div>
+
 </div>
+<!-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+<div class="clear"></div>
 
-<!-- RELATED PRODUCTS -->
-{$upselling = $product->upSelling()}
-{$crossselling = $product->crossSelling()}
+{*
+<div class="extra-box-product">
 
-{if $upselling || $crossselling}
-    <div class="content right300px">
+    <section class="page_product_box blockproductscategory">
+        <h3>12 другие товары из этого раздела:<i class="icon-toggle icon-minus-sign-alt"></i></h3>
+        <div id="block-category-slider" class="carusel-inner responsive  toggle_content">
+            <ul id="carouselproduct" class="carousel-ul">
+                <li class="item">
+                    <div class="clearfix">
+                        <a href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=2&controller=product&id_lang=3" class="lnk_img" title="Furla Uomo London Bags Collection"><img src="http://livedemo00.template-help.com/prestashop_47744/img/p/8/8-medium_default.jpg" alt="Furla Uomo London Bags Collection" /></a>
+                    </div>
+                    <a class="product_link noSwipe" href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=2&amp;controller=product&amp;id_lang=3" title="Furla Uomo London Bags Collection">Furla Uomo...</a>
+                    <p class="price_display">
+                        <span class="price">$62.96</span>
+                    </p>
+                </li>
+                <li class="item">
+                    <div class="clearfix">
+                        <a href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=3&controller=product&id_lang=3" class="lnk_img" title="Brooklyn Heights Stevie"><img src="http://livedemo00.template-help.com/prestashop_47744/img/p/1/5/15-medium_default.jpg" alt="Brooklyn Heights Stevie" /></a>
+                    </div>
+                    <a class="product_link noSwipe" href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=3&amp;controller=product&amp;id_lang=3" title="Brooklyn Heights Stevie">Brooklyn...</a>
+                    <p class="price_display">
+                        <span class="price">$42.96</span>
+                    </p>
+                </li>
+                <li class="item">
+                    <div class="clearfix">
+                        <a href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=4&controller=product&id_lang=3" class="lnk_img" title="An Exquisite Beaded Evening Bag, Vintage-inspired Cluth"><img src="http://livedemo00.template-help.com/prestashop_47744/img/p/1/9/19-medium_default.jpg" alt="An Exquisite Beaded Evening Bag, Vintage-inspired Cluth" /></a>
+                    </div>
+                    <a class="product_link noSwipe" href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=4&amp;controller=product&amp;id_lang=3" title="An Exquisite Beaded Evening Bag, Vintage-inspired Cluth">An Exquisite...</a>
+                    <p class="price_display">
+                        <span class="price">$88.31</span>
+                    </p>
+                </li>
+                <li class="item">
+                    <div class="clearfix">
+                        <a href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=5&controller=product&id_lang=3" class="lnk_img" title="ArtisanStreet's Carpet Bag"><img src="http://livedemo00.template-help.com/prestashop_47744/img/p/2/2/22-medium_default.jpg" alt="ArtisanStreet's Carpet Bag" /></a>
+                    </div>
+                    <a class="product_link noSwipe" href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=5&amp;controller=product&amp;id_lang=3" title="ArtisanStreet's Carpet Bag">ArtisanStree...</a>
+                    <p class="price_display">
+                        <span class="price">$42.96</span>
+                    </p>
+                </li>
+                <li class="item">
+                    <div class="clearfix">
+                        <a href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=6&controller=product&id_lang=3" class="lnk_img" title="ArtisanStreet's Wildlife Tapestry Carpet Bag"><img src="http://livedemo00.template-help.com/prestashop_47744/img/p/2/5/25-medium_default.jpg" alt="ArtisanStreet's Wildlife Tapestry Carpet Bag" /></a>
+                    </div>
+                    <a class="product_link noSwipe" href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=6&amp;controller=product&amp;id_lang=3" title="ArtisanStreet's Wildlife Tapestry Carpet Bag">ArtisanStree...</a>
+                    <p class="price_display">
+                        <span class="price">$42.96</span>
+                    </p>
+                </li>
+                <li class="item">
+                    <div class="clearfix">
+                        <a href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=7&controller=product&id_lang=3" class="lnk_img" title="Boyt Edge Designer Carpet Bag"><img src="http://livedemo00.template-help.com/prestashop_47744/img/p/2/8/28-medium_default.jpg" alt="Boyt Edge Designer Carpet Bag" /></a>
+                    </div>
+                    <a class="product_link noSwipe" href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=7&amp;controller=product&amp;id_lang=3" title="Boyt Edge Designer Carpet Bag">Boyt Edge...</a>
+                    <p class="price_display">
+                        <span class="price">$63.15</span>
+                    </p>
+                </li>
+                <li class="item">
+                    <div class="clearfix">
+                        <a href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=9&controller=product&id_lang=3" class="lnk_img" title="Dakine Girls Messenger Laptop Bag"><img src="http://livedemo00.template-help.com/prestashop_47744/img/p/3/4/34-medium_default.jpg" alt="Dakine Girls Messenger Laptop Bag" /></a>
+                    </div>
+                    <a class="product_link noSwipe" href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=9&amp;controller=product&amp;id_lang=3" title="Dakine Girls Messenger Laptop Bag">Dakine Girls...</a>
+                    <p class="price_display">
+                        <span class="price">$78.17</span>
+                    </p>
+                </li>
+                <li class="item">
+                    <div class="clearfix">
+                        <a href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=10&controller=product&id_lang=3" class="lnk_img" title="Double Pocket Canvas Tote"><img src="http://livedemo00.template-help.com/prestashop_47744/img/p/3/7/37-medium_default.jpg" alt="Double Pocket Canvas Tote" /></a>
+                    </div>
+                    <a class="product_link noSwipe" href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=10&amp;controller=product&amp;id_lang=3" title="Double Pocket Canvas Tote">Double...</a>
+                    <p class="price_display">
+                        <span class="price">$65.69</span>
+                    </p>
+                </li>
+                <li class="item">
+                    <div class="clearfix">
+                        <a href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=17&controller=product&id_lang=3" class="lnk_img" title="Large Belted Hobo Handbags"><img src="http://livedemo00.template-help.com/prestashop_47744/img/p/5/8/58-medium_default.jpg" alt="Large Belted Hobo Handbags" /></a>
+                    </div>
+                    <a class="product_link noSwipe" href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=17&amp;controller=product&amp;id_lang=3" title="Large Belted Hobo Handbags">Large Belted...</a>
+                    <p class="price_display">
+                        <span class="price">$92.25</span>
+                    </p>
+                </li>
+                <li class="item">
+                    <div class="clearfix">
+                        <a href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=18&controller=product&id_lang=3" class="lnk_img" title="Large Brianna Bucket Bag"><img src="http://livedemo00.template-help.com/prestashop_47744/img/p/6/1/61-medium_default.jpg" alt="Large Brianna Bucket Bag" /></a>
+                    </div>
+                    <a class="product_link noSwipe" href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=18&amp;controller=product&amp;id_lang=3" title="Large Brianna Bucket Bag">Large...</a>
+                    <p class="price_display">
+                        <span class="price">$52.96</span>
+                    </p>
+                </li>
+                <li class="item">
+                    <div class="clearfix">
+                        <a href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=19&controller=product&id_lang=3" class="lnk_img" title="Large Leather Mia Hobo By Vitalio"><img src="http://livedemo00.template-help.com/prestashop_47744/img/p/6/4/64-medium_default.jpg" alt="Large Leather Mia Hobo By Vitalio" /></a>
+                    </div>
+                    <a class="product_link noSwipe" href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=19&amp;controller=product&amp;id_lang=3" title="Large Leather Mia Hobo By Vitalio">Large...</a>
+                    <p class="price_display">
+                        <span class="price">$12.62</span>
+                    </p>
+                </li>
+                <li class="item">
+                    <div class="clearfix">
+                        <a href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=20&controller=product&id_lang=3" class="lnk_img" title="Large Zane Hobo' By Vitalio"><img src="http://livedemo00.template-help.com/prestashop_47744/img/p/6/7/67-medium_default.jpg" alt="Large Zane Hobo' By Vitalio" /></a>
+                    </div>
+                    <a class="product_link noSwipe" href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=20&amp;controller=product&amp;id_lang=3" title="Large Zane Hobo' By Vitalio">Large Zane...</a>
+                    <p class="price_display">
+                        <span class="price">$54.25</span>
+                    </p>
+                </li>
+            </ul>
 
-        {if $upselling}
-            <div class="related">
-                <h3>
-                    [`See also`]
-                    {$compare_ids = array_merge(array($product.id), array_keys($upselling))}
-                    <input type="button" onClick="javascript:window.location='{$wa->getUrl('/frontend/compare', ['id' => implode(',', $compare_ids)])}';" value="[`Compare all`]" />
-                    
-                </h3>
-                {include file="list-table.html" products=$upselling}
-            </div>
-        {/if}
+            <a class="prev" id="cat_prev" href="#"></a>
+            <a class="next" id="cat_next" href="#"></a>
+        </div>
+    </section>
+    <script type="text/javascript">
+        $("#carouselproduct").carouFredSel({
+            debug: true,
+            circular: true,
+            infinite: true,
+            responsive: true,
+            align: "center",
+            width: '100%',
+            auto: {
+                play: 1,
+                timeoutDuration: 15000
+            },
+            items: {
+                visible: {
+                    min: 2,
+                    max: 6
+                },
+                width: 167,
+            },
+            scroll: {
+                items: 1,
+                pauseOnHover: false
+            },
+            prev: {
+                button: "#cat_prev"
+            },
+            next: {
+                button: "#cat_next"
+            },
+            swipe: {
+                onMouse: false,
+                onTouch: true
+            }
+        },
+        {
+            classnames: {
+                selected: "selected",
+                hidden: "hidden",
+                disabled: "disabled",
+                paused: "paused",
+                stopped: "stopped"
+            },
+        });
+    </script>
 
-        {if $crossselling}
-            <div class="related">
-                <h3>{sprintf('[`Customers who bought %s also bought`]', $product.name|escape)}</h3>
-                {include file="list-table.html" products=$crossselling}
-            </div>
-        {/if}
+    <script type="text/javascript">
+        $(function() {
+            $('#quantityDiscount table').footable();
+            breakpoints: {
+                phone: 480
+            }
+        });
+    </script>
 
-    </div>
-{/if}
+
+
+    <section class="page_product_box toggle_frame more_info_inner">
+        <h3 class="toggle">Подробнее<i class="icon-toggle icon-minus-sign-alt"></i></h3>
+        <div class="toggle_content">
+            <p>Welcome to the world of fashion. We are proud to present you the largest choice of handbags on the web. Here you can find a great number of different goods. Our store offers stylish, premium quality handbags at the lowest possible prices. We have a perfect reputation and great experience in this sphere and that is why our products are so popular and have many faithful fans all over the country.</p>
+            <p>We are proud to present you the largest choice of handbags on the web. Here you can find a great number of different goods. Our store offers stylish, premium quality handbags at the lowest possible prices. We have a perfect reputation and great experience in this sphere and that is why our products are so popular and have many faithful fans all over the country.</p>
+        </div> 
+    </section>  
+
+
+
+
+
+
+
+
+</div>
+*}

@@ -3,7 +3,6 @@
 <link href="{$wa_active_theme_url}custom.shop.css?v{$wa_theme_version}" rel="stylesheet" type="text/css">
 <link href="{$wa_active_theme_url}custom.shop.mobile.css?v{$wa_theme_version}"{if !$wa->isMobile()} media="screen and (max-width: 760px)"{/if} rel="stylesheet" type="text/css">
 
-<link href="{$wa_active_theme_url}jquery.bxslider.css?v{$wa_theme_version}" rel="stylesheet" type="text/css" />
 
 <!-- js -->
 <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-wa/wa.core.js?v{$wa->version(true)}"></script>
@@ -13,10 +12,34 @@
 <script type="text/javascript" src="{$wa_active_theme_url}custom.shop.js?v{$wa_theme_version}"></script>
 
 {if !empty($nofollow)}
-    <!-- "nofollow" for pages not to be indexed, e.g. customer account -->
-    <meta name="robots" content="noindex,nofollow" />
+<!-- "nofollow" for pages not to be indexed, e.g. customer account -->
+<meta name="robots" content="noindex,nofollow" />
 {/if}
 
 <!-- plugin hook: 'frontend_head' -->
 {* @event frontend_head.%plugin_id% *}
 {foreach $frontend_head as $_}{$_}{/foreach}
+
+
+
+
+<script type="text/javascript">
+			var baseDir = '';
+			var baseUri = '';
+			var static_token = '';
+			var token = '';
+			var priceDisplayPrecision = 2;
+			var priceDisplayMethod = 1;
+			var roundMode = 2;
+		</script>
+
+
+
+
+<script type="text/javascript" src="{$wa_active_theme_url}fancybox/jquery.fancybox.pack.js?v{$wa_theme_version}"></script>
+<link href="{$wa_active_theme_url}fancybox/jquery.fancybox.css?v{$wa_theme_version}" rel="stylesheet" type="text/css" />
+
+
+
+<link href="{$wa_theme_url}css/font-awesome.css?v{$wa_theme_version}" rel="stylesheet" type="text/css"/>
+
