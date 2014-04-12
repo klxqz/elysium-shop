@@ -1,3 +1,26 @@
+{function name=sortOption}
+{if $active_sort === null}
+{$active_sort = waRequest::get('sort')}
+{/if}
+
+{$inverted = in_array($sort, array('rating', 'create_datetime', 'total_sales', 'count', 'stock'))}
+{$data = waRequest::get()}
+{$data['sort'] = $sort}
+{if $sort == $active_sort}
+{if waRequest::get('order') == 'asc'}
+{$data['order'] = 'desc'}
+{else}
+{$data['order'] = 'asc'}
+{/if}
+{else}
+{if $inverted}
+{$data['order'] = 'desc'}
+{else}
+{$data['order'] = 'asc'}
+{/if}
+{/if}
+<option value="?{http_build_query($data)}" {if $active_sort == $sort}selected="selected"{/if}>{$name} {if $active_sort == $sort}{if $data['order'] == 'asc'}&uarr;{else}&darr;{/if}{/if}</option>
+{/function}
 
 <h1 class="category-name">
     <span>{$category.name|escape}</span>
@@ -41,39 +64,46 @@
         <li id="product_view_grid" class="current "><i class="icon-th-large"></i></li>
         <li id="product_view_list" class=""><i class="icon-th-list"></i></li>
     </ul>
-    <form id="productsSortForm" action="#" class="nbrItemPage productsSortForm">
-        <label for="selectPrductSort">Сортировать по</label>
-        <select id="selectPrductSort" class="selectProductSort">
-            <option value="position:asc" selected="selected">--</option>
-            <option value="price:asc" >Цена, по возрастанию</option>
-            <option value="price:desc" >Цена, по убыванию</option>
-            <option value="name:asc" >По названию товара, от А до Я</option>
-            <option value="name:desc" >По названию товара, от Я до А</option>
-            <option value="quantity:desc" >По наличию</option>
-            <option value="reference:asc" >Артикул, по возрастанию</option>
-            <option value="reference:desc" >Артикул, по возрастанию</option>
-        </select>
 
-    </form>
+
+
+    {$sorting=!empty($category.params.enable_sorting)}
+    {if !empty($sorting)}
+    <!-- sorting -->
+    {$sort_fields = ['rating' => '[`Customer rating`]', 'total_sales' => '[`Bestsellers`]', 'price' => '[`Price`]', 'name' => '[`Name`]', 'create_datetime'=>'[`Date added`]', 'stock' => '[`In stock`]']}
+    {if !isset($active_sort)}
+    {$active_sort = $wa->get('sort', 'create_datetime')}
+    {/if}
+    <div id="productsSortForm" class="nbrItemPage productsSortForm">
+        <label for="selectPrductSort">[`Sort by`]</label>
+
+        <select id="selectPrductSort" class="selectProductSort">
+            {if !empty($category) && !$category.sort_products}
+            <option value="{$wa->currentUrl(0, 1)}" {if !$active_sort} selected="selected"{/if} >[`New & Popular`]</option>
+            {/if}
+            {foreach $sort_fields as $sort => $name}
+            {$params = ['sort' => $sort, 'name' => $name, 'active_sort' => $active_sort]}
+            {sortOption $params}
+            {if $wa->get('sort') == $sort}{$wa->title( $wa->title()|cat:' — '|cat:$name)}{/if}
+            {/foreach}
+        </select>
+    </div>
+    {/if}
+
+
     <!-- /Sort products -->
 
 
     <!-- nbr product/page -->
-    <form action="#" method="get" class="nbrItemPage nbr_page">
-
+    <div class="nbrItemPage nbr_page">
+        {$products_pers = array(6,10,20,50,100)}
         <label for="nb_item">Показать:</label>
-        <input type="hidden" name="id_lang" value="3" />
-        <input type="hidden" name="id_category" value="3" />
-        <input type="hidden" name="controller" value="category" />
-        <select name="n" id="nb_item" class="js-nb_item nb_item" onchange="this.form.submit();">
-            <option value="6" selected="selected">6</option>
-            <option value="10" >10</option>
-            <option value="20" >20</option>
-            <option value="50" >50</option>
+        <select name="n" id="nb_item" class="js-nb_item nb_item">
+            {foreach $products_pers as $products_per}
+            <option value="{$products_per}" {if $smarty.cookies.products_per_page == $products_per}selected="selected"{/if} >{$products_per}</option>
+            {/foreach}
         </select>
-
-
-    </form>
+    </div>
     <!-- /nbr product/page -->
 
 </div>

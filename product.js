@@ -11,21 +11,21 @@ function currency_format(number, no_html) {
     var thousands_sep = currency.thousands_sep;
 
     // input sanitation & defaults
-    if( isNaN(decimals = Math.abs(decimals)) ){
+    if (isNaN(decimals = Math.abs(decimals))) {
         decimals = 2;
     }
-    if( dec_point == undefined ){
+    if (dec_point == undefined) {
         dec_point = ",";
     }
-    if( thousands_sep == undefined ){
+    if (thousands_sep == undefined) {
         thousands_sep = ".";
     }
 
     i = parseInt(number = (+number || 0).toFixed(decimals)) + "";
 
-    if( (j = i.length) > 3 ){
+    if ((j = i.length) > 3) {
         j = j % 3;
-    } else{
+    } else {
         j = 0;
     }
 
@@ -44,7 +44,11 @@ function currency_format(number, no_html) {
     }
 }
 
-$(function () {
+$(function() {
+    $('#link_btn_add_cart.btn_add_cart').live('click', function() {
+        $(this).closest('form#cart-form').submit();
+        return false;
+    });
 
     // scroll-dependent animations: flying product info block
     $(window).scroll(function() {
@@ -58,11 +62,11 @@ $(function () {
         }
     });
 
-    var service_variant_html = function (id, name, price) {
+    var service_variant_html = function(id, name, price) {
         return '<option data-price="' + price + '" id="service-variant-' + id + '" value="' + id + '">' + name + ' (+' + currency_format(price, 1) + ')</option>';
     }
 
-    var update_sku_services = function (sku_id) {
+    var update_sku_services = function(sku_id) {
         $("div.stocks div").hide();
         $("#sku-" + sku_id + "-stock").show();
         for (var service_id in sku_services[sku_id]) {
@@ -93,14 +97,17 @@ $(function () {
         }
     }
 
-    $("#product-skus input[type=radio]").click(function () {
+    $("#product-skus input[type=radio]").click(function() {
         if ($(this).data('image-id')) {
             $("#product-image-" + $(this).data('image-id')).click();
         }
         if ($(this).data('disabled')) {
-            $(".add2cart input[type=submit]").attr('disabled', 'disabled');
+
+            $(".add2cart #link_btn_add_cart").removeClass('btn_add_cart');
+            $(".add2cart #link_btn_add_cart").addClass('disabled');
         } else {
-            $(".add2cart input[type=submit]").removeAttr('disabled');
+            $(".add2cart #link_btn_add_cart").removeClass('disabled');
+            $(".add2cart #link_btn_add_cart").addClass('btn_add_cart');
         }
         var sku_id = $(this).val();
         update_sku_services(sku_id);
@@ -109,9 +116,9 @@ $(function () {
     $("#product-skus input[type=radio]:checked").click();
 
 
-    $("select.sku-feature").change(function () {
+    $("select.sku-feature").change(function() {
         var key = "";
-        $("select.sku-feature").each(function () {
+        $("select.sku-feature").each(function() {
             key += $(this).data('feature-id') + ':' + $(this).val() + ';';
         });
         var sku = sku_features[key];
@@ -156,7 +163,7 @@ $(function () {
             $(".add2cart .compare-at-price").hide();
         }
 
-        $("#cart-form .services input:checked").each(function () {
+        $("#cart-form .services input:checked").each(function() {
             var s = $(this).val();
             if ($('#service-' + s + '  .service-variants').length) {
                 price += parseFloat($('#service-' + s + '  .service-variants :selected').data('price'));
@@ -172,25 +179,27 @@ $(function () {
     }
 
     // product images
-    $("#product-gallery a").click(function () {
+    $("#product-gallery a").click(function() {
 
         $("#product-image").parent().find("div.loading").remove();
-        $("#product-image").parent().append('<div class="loading" style="position: absolute; left: ' + (($("#product-image").width() - 16) / 2) + 'px; top: ' + (($("#product-image").height() - 16)/2) + 'px"><i class="icon16 loading"></i></div>');
+        $("#product-image").parent().append('<div class="loading" style="position: absolute; left: ' + (($("#product-image").width() - 16) / 2) + 'px; top: ' + (($("#product-image").height() - 16) / 2) + 'px"><i class="icon16 loading"></i></div>');
         var img = $(this).find('img');
         var size = $("#product-image").attr('src').replace(/^.*\/[0-9]+\.(.*)\..*$/, '$1');
         var src = img.attr('src').replace(/^(.*\/[0-9]+\.)(.*)(\..*)$/, '$1' + size + '$3');
-        $('<img>').attr('src', src).load(function () {
+        $('<img>').attr('src', src).load(function() {
             $("#product-image").attr('src', src);
             $("#product-image").parent().find("div.loading").remove();
         }).each(function() {
             //ensure image load is fired. Fixes opera loading bug
-            if (this.complete) { $(this).trigger("load"); }
+            if (this.complete) {
+                $(this).trigger("load");
+            }
         });
         return false;
     });
 
     // add to cart block: services
-    $(".cart .services input[type=checkbox]").click(function () {
+    $(".cart .services input[type=checkbox]").click(function() {
         var obj = $('select[name="service_variant[' + $(this).val() + ']"]');
         if (obj.length) {
             if ($(this).is(':checked')) {
@@ -202,12 +211,12 @@ $(function () {
         update_price();
     });
 
-    $(".cart .services .service-variants").on('change', function () {
+    $(".cart .services .service-variants").on('change', function() {
         update_price();
     });
 
     // compare block
-    $("a.compare-add").click(function () {
+    $("a.compare-add").click(function() {
         var compare = $.cookie('shop_compare');
         if (compare) {
             compare += ',' + $(this).data('product');
@@ -218,12 +227,12 @@ $(function () {
             var url = $("#compare-link").attr('href').replace(/compare\/.*$/, 'compare/' + compare + '/');
             $("#compare-link").attr('href', url).show().find('span.count').html(compare.split(',').length);
         }
-        $.cookie('shop_compare', compare, { expires: 30, path: '/'});
+        $.cookie('shop_compare', compare, {expires: 30, path: '/'});
         $(this).hide();
         $("a.compare-remove").show();
         return false;
     });
-    $("a.compare-remove").click(function () {
+    $("a.compare-remove").click(function() {
         var compare = $.cookie('shop_compare');
         if (compare) {
             compare = compare.split(',');
@@ -236,7 +245,7 @@ $(function () {
         }
         $("#compare-link").hide();
         if (compare) {
-            $.cookie('shop_compare', compare.join(','), { expires: 30, path: '/'});
+            $.cookie('shop_compare', compare.join(','), {expires: 30, path: '/'});
         } else {
             $.cookie('shop_compare', null);
         }
@@ -245,15 +254,15 @@ $(function () {
         return false;
     });
 
-    $("#cart-form").submit(function () {
+    $("#cart-form").submit(function() {
         var f = $(this);
-        $.post(f.attr('action') + '?html=1', f.serialize(), function (response) {
+        $.post(f.attr('action') + '?html=1', f.serialize(), function(response) {
             if (response.status == 'ok') {
                 var cart_total = $(".cart-total");
                 var cart_div = f.closest('.cart');
-                if ( $(window).scrollTop()>=35 ) {
-                    cart_total.closest('#cart').addClass( "fixed" );
-    	        }
+                if ($(window).scrollTop() >= 35) {
+                    cart_total.closest('#cart').addClass("fixed");
+                }
                 cart_total.closest('#cart').removeClass('empty');
 
                 var clone = $('<div class="cart"></div>').append($('#cart-form').clone());
@@ -265,9 +274,9 @@ $(function () {
                 clone.css({
                     top: cart_div.offset().top,
                     left: cart_div.offset().left,
-                    width: cart_div.width()+'px',
-                    height: cart_div.height()+'px',
-                    position: 'absolute',
+                    width: cart_div.width() + 'px',
+                    height: cart_div.height() + 'px',
+                    position: 'fixed',
                     overflow: 'hidden'
                 }).animate({
                     top: cart_total.offset().top,

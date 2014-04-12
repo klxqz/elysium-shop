@@ -1,89 +1,166 @@
 {$wa->title('[`Compare products`]')}
 <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-plugins/jquery.cookie.js"></script>
-<h1>[`Compare products`]</h1>
+<h1><span>[`Compare products`]</span></h1>
 
 <script>
-    $(function () {
-    $("#compare-all").click(function () {
-        $("#compare-table tr.same").show();
-        $(this).closest('ul').find('li.selected').removeClass('selected');
-        $(this).parent().addClass('selected');
-        return false;
-    });
-    $("#compare-diff").click(function () {
-        $("#compare-table tr.same").hide();
-        $(this).closest('ul').find('li.selected').removeClass('selected');
-        $(this).parent().addClass('selected');
-        return false;
-    });
-    $(".compare-remove").on('click', function () {
-        var compare = $.cookie('shop_compare');
-        if (compare) {
-            compare = compare.split(',');
-        } else {
-            compare = [];
-        }
-        var i = $.inArray($(this).data('product') + '', compare);
-        if (i != -1) {
-            compare.splice(i, 1)
-        }
-        if (compare) {
-            $.cookie('shop_compare', compare.join(','), { expires: 30, path: '/'});
-        } else {
-            $.cookie('shop_compare', null);
-        }
-    });
+    $(function() {
+        $("#compare-all").click(function() {
+            $("#product_comparison tr.same").show();
+            $(this).closest('ul').find('li.selected').removeClass('selected');
+            $(this).parent().addClass('selected');
+            return false;
+        });
+        $("#compare-diff").click(function() {
+            $("#product_comparison tr.same").hide();
+            $(this).closest('ul').find('li.selected').removeClass('selected');
+            $(this).parent().addClass('selected');
+            return false;
+        });
+        $(".compare-remove").on('click', function() {
+            var compare = $.cookie('shop_compare');
+            if (compare) {
+                compare = compare.split(',');
+            } else {
+                compare = [];
+            }
+            var i = $.inArray($(this).data('product') + '', compare);
+            if (i != -1) {
+                compare.splice(i, 1)
+            }
+            if (compare) {
+                $.cookie('shop_compare', compare.join(','), {
+                    expires: 30, path: '/'
+                });
+            } else {
+                $.cookie('shop_compare', null);
+            }
+        });
     });
 </script>
+{*
+<table class="table table-hover table-bordered table-responsive" id="product_comparison">
+    <thead>
+        <tr class="comparison_header">
+            <th></th>
+            <th>   				
+                <a title="Extra-Large Madison Satchel" href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=1&amp;controller=product&amp;id_lang=1" class="product_link">Extra-Large Madison...</a>
+            </th>
+            <th>   				
+                <a title="Furla Uomo London Bags..." href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=2&amp;controller=product&amp;id_lang=1" class="product_link">Furla Uomo London Bags...</a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr><td class="title_compare">Features</td>
+
+            <td class="ajax_block_product">
+
+                <div class="comparison_product_infos">
+                    <div class="product_image_div">
+                        <a rel="ajax_id_product_1" href="http://livedemo00.template-help.com/prestashop_47744/index.php?controller=products-comparison" class="cmp_remove"><i class="icon-trash"></i></a>
+
+                        <a class="product_image" title="Extra-Large Madison Satchel" href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=1&amp;controller=product&amp;id_lang=1">
+
+                            <span class="on_sale"><img class="on_sale_img" alt="On sale" src="http://livedemo00.template-help.com/prestashop_47744/themes/theme852/img/onsale_en.gif"></span>
+                            <img alt="Extra-Large Madison Satchel" src="http://livedemo00.template-help.com/prestashop_47744/img/p/1/1-medium_default.jpg">
+
+
+
+                        </a>
+                    </div>
+
+                    <p class="product_desc"><a title="More" href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=1&amp;controller=product&amp;id_lang=1" class="product_descr"> Welcome to the world of fashion. We are proud to present...</a></p>
+                    <span class="price">15,55€</span>
+
+
+
+
+                </div>
+            </td>
+            <td class="ajax_block_product">
+
+                <div class="comparison_product_infos">
+                    <div class="product_image_div">
+                        <a rel="ajax_id_product_2" href="http://livedemo00.template-help.com/prestashop_47744/index.php?controller=products-comparison" class="cmp_remove"><i class="icon-trash"></i></a>
+
+                        <a class="product_image" title="Furla Uomo London Bags Collection" href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=2&amp;controller=product&amp;id_lang=1">
+                            <img alt="Furla Uomo London Bags Collection" src="http://livedemo00.template-help.com/prestashop_47744/img/p/8/8-medium_default.jpg">
+
+
+
+                        </a>
+                    </div>
+
+                    <p class="product_desc"><a title="More" href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=2&amp;controller=product&amp;id_lang=1" class="product_descr"> We are proud to present you the largest choice of...</a></p>
+                    <span class="price">75,55€</span>
+                </div>
+            </td>
+        </tr>
+        <tr>
+
+            <td class="comparison_feature_odd">
+                Depth
+            </td>
+            <td width="40%" class="comparison_feature_odd comparison_infos">100</td>
+            <td width="40%" class="comparison_feature_odd comparison_infos"></td>
+        </tr>
+
+
+    </tbody>
+</table>
+*}
+
+
 
 {$td_width = round((100-25)/count($products))}
-<table id="compare-table" class="compare">
+<table class="table table-hover table-bordered table-responsive compare" id="product_comparison" >
     <tr>
         <th>    
-            {*
-            uncomment for all/different only toggle
-            <ul class="menu-h">
-                <li class="selected"><a id="compare-all" href="#" class="inline-link"><b><i>[`All features`]</i></b></a></li>
-                <li><a id="compare-diff" href="#" class="inline-link"><b><i>[`Different`]</i></b></a></li>
-            </ul>        
-            *}
+
         </th>
         {foreach $products as $p}
-            <td width="{$td_width}%">
-                <a href="{$wa->getUrl('/frontend/product/', ['product_url' => $p.url])}" class="no-underline">
-                    {$wa->shop->productImgHtml($p, '96x96', ['itemprop' => 'image', 'id' => 'product-image', 'default' => "`$wa_theme_url`img/dummy96.png", 'title' => $p.name|cat:' ':strip_tags($p.summary)|escape])}
-                    <u>{$p.name|escape}</u>
-                </a>
-                {if count($products) > 2}
-                    <br><br>
-                    <a data-product="{$p.id}" class="compare-remove" href="{$p.delete_url}" title="[`Remove from comparison list`]"><i class="icon16 remove"></i></a>
+        <td width="{$td_width}%">
+
+            <div class="comparison_product_infos">
+                <div class="product_image_div">
+                    {if count($products) > 2}
+                    <a href="{$p.delete_url}" class="compare-remove cmp_remove"><i class="icon-trash"></i></a>
+                    {/if}
+                    <a href="{$wa->getUrl('/frontend/product/', ['product_url' => $p.url])}" class="no-underline">
+                        {$wa->shop->productImgHtml($p, '96x96', ['itemprop' => 'image', 'id' => 'product-image', 'default' => "`$wa_theme_url`img/dummy96.png", 'title' => $p.name|cat:' ':strip_tags($p.summary)|escape])}
+                        <u>{$p.name|escape}</u>
+                    </a>
+                </div>
+                {if $p.summary}
+                <p class="product_desc"><a title="More" href="{$wa->getUrl('/frontend/product/', ['product_url' => $p.url])}" class="product_descr">{strip_tags($p.summary)}</a></p>
                 {/if}
-            </td>
+            </div>
+        </td>
         {/foreach}
     </tr>
     <tr>
-        <th>[`Price`]</th>
+        <td>[`Price`]</td>
         {foreach $products as $p}
-            <td width="{$td_width}%">
-                <span class="price nowrap">{shop_currency_html($p.price)}</span>
-            </td>
+        <td width="{$td_width}%">
+            <span class="price nowrap">{shop_currency_html($p.price)}</span>
+        </td>
         {/foreach}
     </tr>
     {foreach $features as $f_id=>$f}
     <tr{if $f.same} class="same"{/if}>
-        <th>{$f.name}</th>
+        <td>{$f.name}</td>
         {foreach $products as $p}
-            <td>
+        <td>
             {if isset($p.features[$f_id])}
-                {if is_array($p.features[$f_id])}
-                    {implode(', ', $p.features[$f_id])}
-                {else}
-                    {$p.features[$f_id]}
-                {/if}
+            {if is_array($p.features[$f_id])}
+            {implode(', ', $p.features[$f_id])}
             {else}
-                <span class="gray">&mdash;</span>
+            {$p.features[$f_id]}
             {/if}
-            </td>
+            {else}
+            <span class="gray">&mdash;</span>
+            {/if}
+        </td>
         {/foreach}
     </tr>
     {/foreach}

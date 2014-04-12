@@ -19,7 +19,7 @@ $(function() {
     var next = current.next();
     if (next.length) {
         win.lazyLoad({
-            container: '#main > .content',
+            container: '#center_column',
             load: function() {
                 win.lazyLoad('sleep');
 
@@ -59,6 +59,7 @@ $(function() {
                     
                     loading.hide();
                     tmp.remove();
+                    $(".compare .comparator").uniform();
                 });
             }
         });

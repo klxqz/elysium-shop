@@ -1,0 +1,26 @@
+
+
+<div  class="carusel-inner responsive toggle_content">
+    <ul class="carousel-ul">
+        {foreach $products as $p}
+        <li class="item" itemscope itemtype ="http://schema.org/Product">
+            <div class="clearfix">
+                <a href="{$p.frontend_url}" class="lnk_img" title="{$p.name}{if $p.summary} &mdash; {strip_tags($p.summary)}{/if}">
+                    {$badge_html = $wa->shop->badgeHtml($p.badge)}
+                    {if $badge_html}
+                    <div class="corner top right">{$badge_html}</div>
+                    {/if}
+                    {$wa->shop->productImgHtml($p, '48x48', ['itemprop' => 'image', 'alt' => $p.name])}
+                </a>
+            </div>
+            <a class="product_link noSwipe" href="{$p.frontend_url}" title="{$p.name}{if $p.summary} &mdash; {strip_tags($p.summary)}{/if}">{$p.name}</a>
+            <p class="price_display">
+                <span class="price">{shop_currency_html($p.price)}</span>
+            </p>
+        </li>
+        {/foreach}
+    </ul>
+    <a class="prev cat_prev" href="#"></a>
+    <a class="next cat_next" href="#"></a>
+</div>
+
