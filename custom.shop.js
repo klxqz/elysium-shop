@@ -105,6 +105,12 @@ $(document).ready(function() {
             }
             $(window).lazyLoad && $(window).lazyLoad('reload');
             $(".compare .comparator").uniform();
+            $('ul.product_view').each(function(i) {
+                var cookie = $.cookie('tabCookie' + i);
+                if (cookie)
+                    $(this).find('li').eq(cookie).addClass('current').siblings().removeClass('current')
+                            .parents('#center_column').find('#product_list').addClass('list').removeClass('grid').eq(cookie).addClass('grid').removeClass('list');
+            });
         });
 
     });

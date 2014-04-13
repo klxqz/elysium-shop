@@ -41,10 +41,9 @@
                 <div id="thumbs_list">
                     <ul id="thumbs_list_frame">
                         {foreach $product.images as $image}
-                        <li id="thumbnail_{$image.id}">
-                            <a href="{shopImage::getUrl(['id' => $image.id, 'product_id' => $product.id, 'ext' => $image.ext], '900', false)}" class="cloud-zoom-gallery" rel="useZoom: 'zoom1', smallImage: '{shopImage::getUrl(['id' => $image.id, 'product_id' => $product.id, 'ext' => $image.ext], '400', false)}'">
+                        <li>
+                            <a id="product-image-{$image.id}" href="{shopImage::getUrl(['id' => $image.id, 'product_id' => $product.id, 'ext' => $image.ext], '900', false)}" class="cloud-zoom-gallery" rel="useZoom: 'zoom1', smallImage: '{shopImage::getUrl(['id' => $image.id, 'product_id' => $product.id, 'ext' => $image.ext], '400', false)}'">
                                 <img id="thumb_{$image.id}" src="{shopImage::getUrl(['id' => $image.id, 'product_id' => $product.id, 'ext' => $image.ext], '70x70', false)}" alt="Extra-Large Madison Satchel"  />
-
                             </a>
                         </li>
                         {/foreach}
@@ -53,25 +52,9 @@
                 </div>
                 <a id="view_scroll_right" title="Другие виды" href="javascript:{}">Следующая</a>		
             </div>
-            <p class="resetimg">
-                <span id="wrapResetImages" style="display:none;">
-                    <i class="icon-reply"></i>
-                    <a id="resetImages" href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=1&amp;controller=product&amp;id_lang=3" onclick="$('span#wrapResetImages').hide('slow');
-                            return (false);">Показать все фотографии</a>
-                </span>
-            </p>
+
 
             <ul id="usefull_link_block" class="clearfix" >
-                <li id="left_share_fb">
-                    <a href="http://www.facebook.com/sharer.php?u=http%3A%2F%2Flivedemo00.template-help.com%2Fprestashop_47744%2Findex.php%3Fid_product%3D1%26controller%3Dproduct%26id_lang%3D3&amp;t=Extra-Large+Madison+Satchel" class="js-new-window"><i class="icon-facebook-sign"></i>Share on Facebook</a>
-                </li>
-
-                <li id="favoriteproducts_block_extra_added" class="favorite">
-                    <i class="icon-heart"></i>Удалите этот товар из моего избранного
-                </li>
-                <li id="favoriteproducts_block_extra_removed" class="favorite">
-                    <i class="icon-heart-empty"></i>Добавьте этот товар к моему избранному
-                </li>
                 <li class="print"><a href="javascript:print();"><i class="icon-print"></i>Распечатать</a></li>
             </ul>  
         </div>
@@ -93,9 +76,7 @@
                 </div>
             </div>
             {/if}
-
-
-
+            <div class="clear"></div>
             <!-- add to cart form-->
             <div class="cart">
                 {include file="product.cart.html" inline}
@@ -121,6 +102,7 @@
                 {foreach $frontend_product as $_}{$_.cart}{/foreach}
             </div>
             <div id="ShareDiv" class="addsharethis">
+                {*
                 <script type="text/javascript">(function() {
                         if (window.pluso)
                             if (typeof window.pluso.start == "function")
@@ -137,6 +119,7 @@
                         }
                     })();</script>
                 <div class="pluso" data-background="#ebebeb" data-options="big,square,line,horizontal,counter,theme=06" data-services="vkontakte,odnoklassniki,facebook,twitter,google,moimir,email,print"></div>
+                *}
             </div>
 
 
@@ -199,7 +182,7 @@
 
     {if $crossselling}
     <section class="page_product_box blockproductscategory">
-        <h3>{sprintf('[`Customers who bought %s also bought`]', $product.name|escape)}</h3>
+        <h3>{sprintf('[`Customers who bought %s also bought`]', $product.name|escape)}<i class="icon-toggle icon-minus-sign-alt"></i></h3>
         {include file="list-slider.html" products=$crossselling}
     </section>
     {/if}
@@ -217,12 +200,12 @@
                 width: '100%',
                 auto: {
                     play: 1,
-                    timeoutDuration: 15000
+                    timeoutDuration: 5000
                 },
                 items: {
                     visible: {
                         min: 2,
-                        max: 6
+                        max: 10
                     },
                     width: 167,
                 },
