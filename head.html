@@ -19,3 +19,39 @@
 
 
 <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-plugins/jquery.cookie.js"></script>
+
+
+<script type="text/javascript" src="{$wa_active_theme_url}jquery.elevateZoom-3.0.8.min.js"></script>
+
+<script type="text/javascript" src="{$wa_active_theme_url}fancybox/jquery.fancybox.js?v=2.1.5"></script>
+<link rel="stylesheet" type="text/css" href="{$wa_active_theme_url}fancybox/jquery.fancybox.css?v=2.1.5" media="screen" />
+
+
+<script type="text/javascript">
+    $(document).ready(function() {
+
+        $("#product-image").elevateZoom({
+            zoomType: "window",
+            cursor: "crosshair",
+            zoomWindowFadeIn: 500,
+            zoomWindowFadeOut: 750,
+            gallery: "product-gallery",
+            galleryActiveClass: "thumbActive",
+            zoomWindowWidth: 400,
+            borderSize: 1,
+            borderColour: '#e5e5e5',
+            lensOpacity: 0.7,
+            scrollZoom: true,
+            constrainType: 'width'
+        });
+
+        $("#product-image").bind("click", function(e) {
+            var ez = $('#product-image').data('elevateZoom');
+            $.fancybox(ez.getGalleryList());
+            return false;
+        });
+
+
+
+    });
+</script>

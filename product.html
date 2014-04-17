@@ -27,30 +27,30 @@
 
             <!-- product img-->
             <div id="image-block">
-                <span id="view_full_size">
-                    <a id="zoom1" rel="position: 'inside' , showTitle: false, adjustX:0, adjustY:0" class="cloud-zoom" href="{shopImage::getUrl(['id' => $product.image_id, 'product_id' => $product.id, 'ext' => $product.ext], '900', false)}">
-                        {$wa->shop->productImgHtml($product, '400', [ 'itemprop' => 'image', 'id' => 'bigpic', 'alt' => $product.name|escape|cat:' ':strip_tags($product.summary)|escape ])}
-                        <span class="mask"></span>
-                    </a>
-                </span>
+                <img id="product-image" src="{shopImage::getUrl(['id' => $product.image_id, 'product_id' => $product.id, 'ext' => $product.ext], '360', false)}"  
+                     data-zoom-image="{shopImage::getUrl(['id' => $product.image_id, 'product_id' => $product.id, 'ext' => $product.ext], '900', false)}"/>
             </div>
 
             <!-- thumbnails -->
             <div id="views_block" >
-                <a id="view_scroll_left"  title="Другие виды" href="javascript:{}">Предыдущая</a>		
+
                 <div id="thumbs_list">
-                    <ul id="thumbs_list_frame">
+                    <ul id="product-gallery">
                         {foreach $product.images as $image}
                         <li>
-                            <a id="product-image-{$image.id}" href="{shopImage::getUrl(['id' => $image.id, 'product_id' => $product.id, 'ext' => $image.ext], '900', false)}" class="cloud-zoom-gallery" rel="useZoom: 'zoom1', smallImage: '{shopImage::getUrl(['id' => $image.id, 'product_id' => $product.id, 'ext' => $image.ext], '400', false)}'">
-                                <img id="thumb_{$image.id}" src="{shopImage::getUrl(['id' => $image.id, 'product_id' => $product.id, 'ext' => $image.ext], '70x70', false)}" alt="Extra-Large Madison Satchel"  />
+                            <a id="product-image-{$image.id}" 
+                               href="#"
+                               data-image="{shopImage::getUrl(['id' => $image.id, 'product_id' => $product.id, 'ext' => $image.ext], '360', false)}"
+                               data-zoom-image="{shopImage::getUrl(['id' => $image.id, 'product_id' => $product.id, 'ext' => $image.ext], '900', false)}"
+                               class="elevatezoom-gallery">
+                                <img id="thumb_{$image.id}" src="{shopImage::getUrl(['id' => $image.id, 'product_id' => $product.id, 'ext' => $image.ext], '70x70', false)}"  />
                             </a>
                         </li>
                         {/foreach}
 
                     </ul>
                 </div>
-                <a id="view_scroll_right" title="Другие виды" href="javascript:{}">Следующая</a>		
+
             </div>
 
 
