@@ -53,13 +53,7 @@
 
 <div class="sortPagiBar shop_box_row shop_box_row clearfix">
 
-    <script type="text/javascript">
-        //<![CDATA[
-        $(document).ready(function() {
-            $('#productsSortForm .selectProductSort, .nb_item').uniform();
-        });
-        //]]>
-    </script>     
+
     <ul class="product_view clearfix hidden-xs">
         <li id="product_view_grid" class="current "><i class="icon-th-large"></i></li>
         <li id="product_view_list" class=""><i class="icon-th-list"></i></li>
@@ -99,8 +93,13 @@
         {$products_pers = array(6,10,20,50,100)}
         <label for="nb_item">Показать:</label>
         <select name="n" id="nb_item" class="js-nb_item nb_item">
+            {if isset($smarty.cookies.products_per_page)}
+            {$products_per_page = $smarty.cookies.products_per_page}
+            {else}
+            {$products_per_page = 50}
+            {/if}
             {foreach $products_pers as $products_per}
-            <option value="{$products_per}" {if $smarty.cookies.products_per_page == $products_per}selected="selected"{/if} >{$products_per}</option>
+            <option value="{$products_per}" {if $products_per_page  == $products_per}selected="selected"{/if} >{$products_per}</option>
             {/foreach}
         </select>
     </div>

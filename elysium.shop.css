@@ -1,16 +1,15 @@
-/*
- * Webasyst CUSTOM theme family
- *
- * Shop-Script app CSS
- * (requires linking base custom.css file from the Site app)
- *
- * @link http://www.webasyst.com/
- * @author Webasyst LLC
- * @copyright 2013 Webasyst LLC
- * @package Webasyst
- */
- 
-/* Misc layout and elements */
+.bxslider .item{
+    text-align: center;
+}
+
+select{
+    max-width: 245px;
+}
+
+.service-variants{
+    width: auto;
+}
+
 .pluso-more, .pluso-counter{ display: none !important;}
 .sidebar { padding-top: 44px; }
 .sidebar.left300px { width: 270px; float: left; }
@@ -36,7 +35,7 @@ div.cart.fixed a { }
 
 /* Homepage */
 
-.promo.hero.superhero { margin-top: -15px; padding: 0; overflow: hidden; background: #fff; }
+.promo.hero.superhero {  padding: 0; overflow: hidden; background: #fff; }
 .promo a { display: block; height: 400px; position: relative; }
 .promo a .image { position: absolute; right: 0; left: 0; top: 0; bottom: 0; }
 .promo a .image .corner.right { right: 60px; }
@@ -60,10 +59,10 @@ div.cart.fixed a { }
 
 
 /* Product info and lists */
-
-.tags a { color: green; }
+#product-categories .product-info a{ text-decoration: underline;}
+#product-tags .product-info a{ text-decoration: underline;}
 .tags.cloud { text-align: center; font-size: 0.9em; padding-top: 20px; margin-top: 30px; border-top: 1px solid #ccc; }
-
+#usefull_link_block .pluso-wrap a:first-child{ margin-left: 0px !important;}
 ul.skus { padding-left: 0; }
 ul.skus li { list-style: none; }
 
@@ -282,6 +281,6 @@ h1 .order-status { font-size: 0.75em; margin-left: 10px; }
 
 .dialog { display: none; }
 .dialog-background { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: #fff; opacity: 0.8; filter: alpha(opacity=80); z-index: 99; }
-.dialog-window .cart { position: fixed; top: 15%; left: 0; right: 0; opacity: 1; z-index: 100; overflow-x: hidden; box-shadow: 0 3px 15px #ddd; margin: 0 auto; text-align: left; width: 400px; bottom: 15%; background: #ceb; padding: 25px; }
+.dialog-window .cart { position: fixed; top: 15%; left: 0; right: 0; opacity: 1; z-index: 100; overflow-x: hidden; box-shadow: 0 3px 15px #ddd; margin: 0 auto; text-align: left; width: 500px; bottom: 15%; background: #eee; padding: 25px; }
 .dialog-window .cart .added2cart { font-size: 1.1em; font-style: italic; }
 .dialog-window .dialog-close { float: right; color: #5a5; text-decoration: none; font-size: 200%; margin-top: -3px; }

@@ -37,78 +37,7 @@
         });
     });
 </script>
-{*
-<table class="table table-hover table-bordered table-responsive" id="product_comparison">
-    <thead>
-        <tr class="comparison_header">
-            <th></th>
-            <th>   				
-                <a title="Extra-Large Madison Satchel" href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=1&amp;controller=product&amp;id_lang=1" class="product_link">Extra-Large Madison...</a>
-            </th>
-            <th>   				
-                <a title="Furla Uomo London Bags..." href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=2&amp;controller=product&amp;id_lang=1" class="product_link">Furla Uomo London Bags...</a>
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr><td class="title_compare">Features</td>
 
-            <td class="ajax_block_product">
-
-                <div class="comparison_product_infos">
-                    <div class="product_image_div">
-                        <a rel="ajax_id_product_1" href="http://livedemo00.template-help.com/prestashop_47744/index.php?controller=products-comparison" class="cmp_remove"><i class="icon-trash"></i></a>
-
-                        <a class="product_image" title="Extra-Large Madison Satchel" href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=1&amp;controller=product&amp;id_lang=1">
-
-                            <span class="on_sale"><img class="on_sale_img" alt="On sale" src="http://livedemo00.template-help.com/prestashop_47744/themes/theme852/img/onsale_en.gif"></span>
-                            <img alt="Extra-Large Madison Satchel" src="http://livedemo00.template-help.com/prestashop_47744/img/p/1/1-medium_default.jpg">
-
-
-
-                        </a>
-                    </div>
-
-                    <p class="product_desc"><a title="More" href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=1&amp;controller=product&amp;id_lang=1" class="product_descr"> Welcome to the world of fashion. We are proud to present...</a></p>
-                    <span class="price">15,55€</span>
-
-
-
-
-                </div>
-            </td>
-            <td class="ajax_block_product">
-
-                <div class="comparison_product_infos">
-                    <div class="product_image_div">
-                        <a rel="ajax_id_product_2" href="http://livedemo00.template-help.com/prestashop_47744/index.php?controller=products-comparison" class="cmp_remove"><i class="icon-trash"></i></a>
-
-                        <a class="product_image" title="Furla Uomo London Bags Collection" href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=2&amp;controller=product&amp;id_lang=1">
-                            <img alt="Furla Uomo London Bags Collection" src="http://livedemo00.template-help.com/prestashop_47744/img/p/8/8-medium_default.jpg">
-
-
-
-                        </a>
-                    </div>
-
-                    <p class="product_desc"><a title="More" href="http://livedemo00.template-help.com/prestashop_47744/index.php?id_product=2&amp;controller=product&amp;id_lang=1" class="product_descr"> We are proud to present you the largest choice of...</a></p>
-                    <span class="price">75,55€</span>
-                </div>
-            </td>
-        </tr>
-        <tr>
-
-            <td class="comparison_feature_odd">
-                Depth
-            </td>
-            <td width="40%" class="comparison_feature_odd comparison_infos">100</td>
-            <td width="40%" class="comparison_feature_odd comparison_infos"></td>
-        </tr>
-
-
-    </tbody>
-</table>
-*}
 
 
 
@@ -127,7 +56,7 @@
                     <a href="{$p.delete_url}" class="compare-remove cmp_remove"><i class="icon-trash"></i></a>
                     {/if}
                     <a href="{$wa->getUrl('/frontend/product/', ['product_url' => $p.url])}" class="no-underline">
-                        {$wa->shop->productImgHtml($p, '96x96', ['itemprop' => 'image', 'id' => 'product-image', 'default' => "`$wa_theme_url`img/dummy96.png", 'title' => $p.name|cat:' ':strip_tags($p.summary)|escape])}
+                        {$wa->shop->productImgHtml($p, '96x96', ['itemprop' => 'image', 'id' => 'compare-product-image', 'default' => "`$wa_theme_url`img/dummy96.png", 'title' => $p.name|cat:' ':strip_tags($p.summary)|escape])}
                         <u>{$p.name|escape}</u>
                     </a>
                 </div>

@@ -1,57 +1,63 @@
 <!-- shop app css -->
 
-<link href="{$wa_active_theme_url}custom.shop.css?v{$wa_theme_version}" rel="stylesheet" type="text/css">
-
-<!-- js -->
-<script type="text/javascript" src="{$wa_url}wa-content/js/jquery-wa/wa.core.js?v{$wa->version(true)}"></script>
-<script type="text/javascript" src="{$wa_active_theme_url}lazyloading.js?v{$wa_theme_version}"></script>
-<script type="text/javascript" src="{$wa_app_static_url}js/lazy.load.js?v{$wa->version()}"></script>
-<script type="text/javascript" src="{$wa_active_theme_url}custom.shop.js?v{$wa_theme_version}"></script>
-
 {if !empty($nofollow)}
 <!-- "nofollow" for pages not to be indexed, e.g. customer account -->
 <meta name="robots" content="noindex,nofollow" />
 {/if}
 
-<!-- plugin hook: 'frontend_head' -->
-{* @event frontend_head.%plugin_id% *}
-{foreach $frontend_head as $_}{$_}{/foreach}
+<link href="{$wa_active_theme_url}elysium.shop.css?v{$wa_theme_version}" rel="stylesheet" type="text/css">
+
+<!-- js -->
+<script type="text/javascript" src="{$wa_url}wa-content/js/jquery-wa/wa.core.js?v{$wa->version(true)}"></script>
+{if !empty($theme_settings.lazyloading)}
+<script type="text/javascript" src="{$wa_app_static_url}js/lazy.load.js?v{$wa->version()}"></script>
+{/if}
+<script type="text/javascript" src="{$wa_active_theme_url}elysium.shop.js?v{$wa_theme_version}"></script>
+
+
 
 
 <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-plugins/jquery.cookie.js"></script>
 
-
+{if !empty($theme_settings.elevate_zoom)}
 <script type="text/javascript" src="{$wa_active_theme_url}jquery.elevateZoom-3.0.8.min.js"></script>
-
-<script type="text/javascript" src="{$wa_active_theme_url}fancybox/jquery.fancybox.js?v=2.1.5"></script>
+{/if}
+<script type="text/javascript" src="{$wa_active_theme_url}fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
 <link rel="stylesheet" type="text/css" href="{$wa_active_theme_url}fancybox/jquery.fancybox.css?v=2.1.5" media="screen" />
 
+{if !empty($theme_settings.filter_slider)}
+<link type="text/css" rel="stylesheet" href="{$wa_url}wa-content/css/jquery-ui/base/jquery.ui.theme.css?v{$wa->version(true)}">
+<link type="text/css" rel="stylesheet" href="{$wa_url}wa-content/css/jquery-ui/base/jquery.ui.slider.css?v{$wa->version(true)}">
+<script type="text/javascript" src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.core.min.js?v{$wa->version(true)}"></script>
+<script type="text/javascript" src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.widget.min.js?v{$wa->version(true)}"></script>
+<script type="text/javascript" src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.mouse.min.js?v{$wa->version(true)}"></script>
+<script type="text/javascript" src="{$wa_url}wa-content/js/jquery-ui/jquery.ui.slider.min.js?v{$wa->version(true)}"></script>
+{/if}
+
+<link href="{$wa_active_theme_url}poshytip/tip-darkgray/tip-darkgray.css?v{$wa_theme_version}" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="{$wa_active_theme_url}poshytip/jquery.poshytip.min.js"></script>
 
 <script type="text/javascript">
-    $(document).ready(function() {
+    $(function(){
+        
+    });
+    
+</script>
 
-        $("#product-image").elevateZoom({
-            zoomType: "window",
-            cursor: "crosshair",
-            zoomWindowFadeIn: 500,
-            zoomWindowFadeOut: 750,
-            gallery: "product-gallery",
-            galleryActiveClass: "thumbActive",
-            zoomWindowWidth: 400,
-            borderSize: 1,
-            borderColour: '#e5e5e5',
-            lensOpacity: 0.7,
-            scrollZoom: true,
-            constrainType: 'width'
+<script type="text/javascript">
+    $(function() {
+        $.elysiumShop.init({
+            filter_slider: {$theme_settings.filter_slider},
+            elevate_zoom: {$theme_settings.elevate_zoom},
+            lazyloading: {$theme_settings.lazyloading},
+            default_product_view: {$theme_settings.default_product_view},
+            add_to_compare: '[`Add to comparison table`]',
+            remove_from_compare: '[`Remove from comparison table`]',
         });
-
-        $("#product-image").bind("click", function(e) {
-            var ez = $('#product-image').data('elevateZoom');
-            $.fancybox(ez.getGalleryList());
-            return false;
-        });
-
-
-
     });
 </script>
+
+
+<!-- plugin hook: 'frontend_head' -->
+{* @event frontend_head.%plugin_id% *}
+{foreach $frontend_head as $_}{$_}{/foreach}

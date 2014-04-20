@@ -16,13 +16,17 @@
 </ul>
 
 
-<div id="primary_block" class="clearfix">
-    <!--ADD CUSTOM CLOUD ZOOM!!!-->
-    <!-- Call quick start function. -->
-    <!-- right infos-->
+<div id="primary_block" class="clearfix" itemscope itemtype="http://schema.org/Product">
     <div class="row">
         <div id="pb-right-column" class="col-xs-12 col-sm-5">
             <h1 itemprop="name" class="pb-right-colum-h">{$product.name|escape}</h1>
+            {if !empty($product.rating) && $product.rating > 0}
+            <span class="rating nowrap pb-right-rating" itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating" title="{sprintf('[`Average user rating: %s / 5`]', $product.rating)}">
+                {$wa->shop->ratingHtml($product.rating, 16)}
+                <span itemprop="ratingValue" style="display: none;">{$product.rating}</span>
+                <span itemprop="reviewCount" style="display: none;">{$reviews_total_count}</span>
+            </span>
+            {/if}
 
 
             <!-- product img-->
@@ -33,7 +37,6 @@
 
             <!-- thumbnails -->
             <div id="views_block" >
-
                 <div id="thumbs_list">
                     <ul id="product-gallery">
                         {foreach $product.images as $image}
@@ -47,15 +50,18 @@
                             </a>
                         </li>
                         {/foreach}
-
                     </ul>
                 </div>
-
             </div>
 
 
             <ul id="usefull_link_block" class="clearfix" >
+
                 <li class="print"><a href="javascript:print();"><i class="icon-print"></i>Распечатать</a></li>
+                <li><a  href="{$wa->shop->productUrl($product, 'reviews')}"><i class="icon-pencil"></i>Напишите свой отзыв</a></li>
+                <li>
+                    <div class="pluso" data-background="transparent" data-options="big,square,line,horizontal,nocounter,theme=01" data-services="vkontakte,odnoklassniki,facebook,twitter,google,moimir,email"></div>
+                </li>
             </ul>  
         </div>
         <!-- left infos-->
@@ -69,10 +75,10 @@
             </span>
             {/if}
 
-            {if $product.description}
+            {if $product.summary}
             <div itemprop="description" id="short_description_block">
                 <div id="short_description_content" class="rte align_justify">
-                    {$product.description}
+                    {$product.summary}
                 </div>
             </div>
             {/if}
@@ -87,42 +93,42 @@
                     <a id="compare-link" {if count($compare) lt 2}style="display:none"{/if} rel="nofollow" href="{$wa->getUrl('/frontend/compare/', ['id' => implode(',', $compare) ])}" class="bold">[`Compare`] <span class="count">{count($compare)}</span></a>                    
                 </p>
 
-                <div id="product_comments_block_extra" class="panel">
-                    <div class="comments_note panel-heading clearfix">
-                    </div>
-                    <div class="comments_advices panel-body">
-                        <a class="open-comment-form"  href="{$wa->shop->productUrl($product, 'reviews')}"><i class="icon-pencil"></i> Напишите свой отзыв</a>
-                    </div>
-                </div>
-                <!--  /Module ProductComments -->
 
+                <!--  /Module ProductComments -->
 
                 <!-- plugin hook: 'frontend_product.cart' -->
                 {* @event frontend_product.%plugin_id%.cart *}
                 {foreach $frontend_product as $_}{$_.cart}{/foreach}
             </div>
-            <div id="ShareDiv" class="addsharethis">
-                {*
-                <script type="text/javascript">(function() {
-                        if (window.pluso)
-                            if (typeof window.pluso.start == "function")
-                                return;
-                        if (window.ifpluso == undefined) {
-                            window.ifpluso = 1;
-                            var d = document, s = d.createElement('script'), g = 'getElementsByTagName';
-                            s.type = 'text/javascript';
-                            s.charset = 'UTF-8';
-                            s.async = true;
-                            s.src = ('https:' == window.location.protocol ? 'https' : 'http') + '://share.pluso.ru/pluso-like.js';
-                            var h = d[g]('body')[0];
-                            h.appendChild(s);
-                        }
-                    })();</script>
-                <div class="pluso" data-background="#ebebeb" data-options="big,square,line,horizontal,counter,theme=06" data-services="vkontakte,odnoklassniki,facebook,twitter,google,moimir,email,print"></div>
-                *}
+            <div class="auxs">
+
+                <!-- categories -->
+                {if $product.categories}
+                <p id="product-categories">
+                    <b>[`Categories`]:</b>
+                    {foreach $product.categories as $c}{if $c.status}
+                    <span class="product-info"><a href="{$wa->getUrl('/frontend/category', ['category_url' => $c.full_url])}">{$c.name|escape}</a></span>
+                    {/if}{/foreach}
+                </p>
+                {/if}
+
+                <!-- tags -->
+                {if $product.tags}
+                <p class="tags" id="product-tags">
+                    <b>[`Tags`]:</b>
+                    <span class="product-info">
+                        {foreach $product.tags as $t}
+                        <a href="{$wa->getUrl('/frontend/tag', ['tag' => urlencode($t)])}">{$t}</a>
+                        {/foreach}
+                    </span>
+                </p>
+                {/if}
+
+                <!-- plugin hook: 'frontend_product.block_aux' -->
+                {* @event frontend_product.%plugin_id%.block_aux *}
+                {foreach $frontend_product as $_}{$_.block_aux}{/foreach}    
+
             </div>
-
-
 
         </div>
     </div>
@@ -138,6 +144,45 @@
 
 
 <div class="extra-box-product">
+
+    {if $product.description}
+    <section class="page_product_box toggle_frame more_info_inner">
+        <h3 class="toggle">Больше информации<i class="icon-toggle icon-minus-sign-alt"></i></h3>
+        <div class="toggle_content" itemprop="description" id="product-description">
+            {$product.description}
+        </div> 
+    </section>
+    {/if}
+
+    <!-- product features -->
+    {if $product.features}
+    <section class="page_product_box toggle_frame more_info_inner">
+        <h3 class="toggle">Характеристики<i class="icon-toggle icon-minus-sign-alt"></i></h3>
+        <div class="toggle_content">
+            <table class="features table table-bordered table-hover" id="product-features">
+                {foreach $product.features as $f_code => $f_value}
+                <tr{if $features[$f_code].type == 'divider'} class="divider"{/if}>
+                    <td class="name">
+                        {$features[$f_code].name|escape}
+                    </td>
+                    <td class="value" itemprop="{$f_code|escape}">
+                        {if is_array($f_value)}
+                        {if $features[$f_code].type == 'color'}
+                        {implode('<br /> ', $f_value)}
+                        {else}
+                        {implode(', ', $f_value)}
+                        {/if}
+                        {else}
+                        {$f_value}
+                        {/if}
+                    </td>
+                </tr>
+                {/foreach}
+            </table>
+        </div> 
+    </section>
+    {/if}
+
 
     <!-- product reviews -->
 
