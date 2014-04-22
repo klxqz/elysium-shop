@@ -58,7 +58,7 @@
             <ul id="usefull_link_block" class="clearfix" >
 
                 <li class="print"><a href="javascript:print();"><i class="icon-print"></i>Распечатать</a></li>
-                <li><a  href="{$wa->shop->productUrl($product, 'reviews')}"><i class="icon-pencil"></i>Напишите свой отзыв</a></li>
+                <li><a  href="{$wa->shop->productUrl($product, 'reviews')}"><i class="icon-pencil"></i>[`Write a review`]</a></li>
                 <li>
                     <div class="pluso" data-background="transparent" data-options="big,square,line,horizontal,nocounter,theme=01" data-services="vkontakte,odnoklassniki,facebook,twitter,google,moimir,email"></div>
                 </li>
@@ -142,9 +142,8 @@
 
 
 
-
+{if $theme_settings.extra_box_view == 'blocks'}
 <div class="extra-box-product">
-
     {if $product.description}
     <section class="page_product_box toggle_frame more_info_inner">
         <h3 class="toggle">Больше информации<i class="icon-toggle icon-minus-sign-alt"></i></h3>
@@ -235,3 +234,89 @@
     {/if}
 
 </div>
+{else}
+
+<div class="extra-box-product">    
+    <ul class="accordion-tabs">
+        {if $product.description}
+        <li class="tab-head-cont">
+            <a href="#" class="is-active">Больше информации<i class="column_icon_toggle icon-plus-sign"></i></a>
+            <section itemprop="description" id="product-description">
+                {$product.description}
+            </section>
+        </li>
+        {/if}
+
+        <!-- product features -->
+        {if $product.features}
+        <li class="tab-head-cont">
+            <a href="#">Характеристики<i class="column_icon_toggle icon-plus-sign"></i></a>
+            <section>
+                <table class="features table table-bordered table-hover" id="product-features">
+                    {foreach $product.features as $f_code => $f_value}
+                    <tr{if $features[$f_code].type == 'divider'} class="divider"{/if}>
+                        <td class="name">
+                            {$features[$f_code].name|escape}
+                        </td>
+                        <td class="value" itemprop="{$f_code|escape}">
+                            {if is_array($f_value)}
+                            {if $features[$f_code].type == 'color'}
+                            {implode('<br /> ', $f_value)}
+                            {else}
+                            {implode(', ', $f_value)}
+                            {/if}
+                            {else}
+                            {$f_value}
+                            {/if}
+                        </td>
+                    </tr>
+                    {/foreach}
+                </table>
+            </section>
+        </li>
+        {/if}
+        <li class="tab-head-cont">
+            <a href="#">{sprintf('[`%s reviews`]', $product.name|escape)}<i class="column_icon_toggle icon-plus-sign"></i></a>
+            <section>
+                <ul class="with-icons">
+                    {foreach $reviews as $review}
+                    <li data-id={$review.id} data-parent-id="0">
+                        {include file="review.html" reply_allowed=false inline}
+                    </li>
+                    {/foreach}
+                </ul>
+                {if !$reviews}
+                <p>{sprintf('[`Be the first to <a href="%s">write a review</a> of this product!`]', 'reviews/')}</p>
+                {else}
+                {sprintf(_w(
+                'Read <a href="%s">all %d review</a> on %s', 
+                'Read <a href="%s">all %d reviews</a> on %s', 
+                $reviews_total_count, false
+                ), 'reviews/', $reviews_total_count, $product.name|escape)
+                }
+                {/if}
+            </section>
+        </li>
+
+        <!-- RELATED PRODUCTS -->
+        {$upselling = $product->upSelling()}
+        {$crossselling = $product->crossSelling()}        
+        {if $upselling || $crossselling}
+        <li class="tab-head-cont">
+            <a href="#">Рекомендуемые товары<i class="column_icon_toggle icon-plus-sign"></i></a>
+            <section class="page_product_box">
+                {if $upselling}
+                <h3>[`See also`]</h3>
+                {include file="list-slider.html" products=$upselling}
+                {/if}
+
+                {if $crossselling}
+                <h3>{sprintf('[`Customers who bought %s also bought`]', $product.name|escape)}</h3>
+                {include file="list-slider.html" products=$crossselling}
+                {/if}
+            </section>
+        </li>
+        {/if}
+    </ul>
+</div>
+{/if}

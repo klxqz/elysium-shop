@@ -134,12 +134,22 @@
                     $('#' + $(this).attr('rel')).show(600);
                     $(this).html('<i class="icon-minus-sign"></i>');
                     $(this).parent().removeClass('closed');
+                    $.cookie('layered_form_' + $(this).attr('rel'), 'open');
                 } else {
                     $('#' + $(this).attr('rel')).hide(600);
                     $(this).html('<i class="icon-plus-sign"></i>');
                     $(this).parent().addClass('closed');
+                    $.cookie('layered_form_' + $(this).attr('rel'), 'close');
                 }
                 e.preventDefault();
+            });
+
+            $('#layered_form span.layered_close a').each(function() {
+                if ($.cookie('layered_form_' + $(this).attr('rel')) == 'close') {
+                    $('#' + $(this).attr('rel')).hide(600);
+                    $(this).html('<i class="icon-plus-sign"></i>');
+                    $(this).parent().addClass('closed');
+                }
             });
 
             $('#product-gallery').bxSlider({
@@ -152,6 +162,22 @@
                 moveSlides: 1,
                 nextText: '',
                 prevText: ''
+            });
+
+            $('.accordion-tabs').children('li').first().children('a').addClass('is-active').next().addClass('is-open').show();
+            $('.accordion-tabs').children('li').first().children('a').find('.column_icon_toggle').removeClass('icon-plus-sign');
+            $('.accordion-tabs').on('click', 'li > a', function(event) {
+                if (!$(this).hasClass('is-active')) {
+                    event.preventDefault();
+                    $('.accordion-tabs .is-open').removeClass('is-open').hide();
+                    $(this).next().toggleClass('is-open').toggle();
+                    $('.accordion-tabs').find('.is-active').removeClass('is-active');
+                    $('.accordion-tabs').find('.column_icon_toggle').addClass('icon-plus-sign');
+                    $(this).addClass('is-active');
+                    $(this).find('.column_icon_toggle').removeClass('icon-plus-sign');
+                } else {
+                    event.preventDefault();
+                }
             });
 
         },
@@ -198,7 +224,7 @@
             if (!this.options.elevate_zoom) {
                 return false;
             }
-            
+
             $("#product-image").elevateZoom({
                 zoomType: "window",
                 cursor: "crosshair",

@@ -197,6 +197,22 @@
             <name locale="en_US">default product view</name>
             <name locale="ru_RU">Отображение товаров к каталоге по умолчанию</name>
         </setting>
+        
+        <setting var="extra_box_view" control_type="select">
+            <options>
+                <option value="blocks">
+                    <name locale="en_US">Blocks</name>
+                    <name locale="ru_RU">Блоки</name>
+                </option>
+                <option value="tabs">
+                    <name locale="en_US">Tabs</name>
+                    <name locale="ru_RU">Вкладки</name>
+                </option>
+            </options>
+            <value>tabs</value>
+            <name locale="en_US">Страница товара. Отображение дополнительной информации.</name>
+            <name locale="ru_RU">Страница товара. Отображение дополнительной информации.</name>
+        </setting>
     </settings>
     <about locale="en_US">
 <![CDATA[

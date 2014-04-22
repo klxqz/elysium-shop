@@ -284,3 +284,120 @@ h1 .order-status { font-size: 0.75em; margin-left: 10px; }
 .dialog-window .cart { position: fixed; top: 15%; left: 0; right: 0; opacity: 1; z-index: 100; overflow-x: hidden; box-shadow: 0 3px 15px #ddd; margin: 0 auto; text-align: left; width: 500px; bottom: 15%; background: #eee; padding: 25px; }
 .dialog-window .cart .added2cart { font-size: 1.1em; font-style: italic; }
 .dialog-window .dialog-close { float: right; color: #5a5; text-decoration: none; font-size: 200%; margin-top: -3px; }
+
+
+.container-tab{
+    margin:auto;
+    max-width:800px;
+    padding:0 20px;
+}
+/* TABS */
+.accordion-tabs {
+    *zoom: 1;
+    width: 100%;
+    border: 1px solid #dddddd;
+    border-radius: 0.1875em;
+    margin-bottom: 1.5em; 
+    margin-left:0;
+    padding-left:0;
+}
+.accordion-tabs:before, 
+.accordion-tabs:after {
+    content: " ";
+    display: table;
+}
+.accordion-tabs:after {
+    clear: both; 
+}
+.accordion-tabs li{
+    list-style:none;
+    position: relative;
+}
+.accordion-tabs li.tab-head-cont:first-child a {
+    border-top-left-radius: 0.1875em;
+    border-top-right-radius: 0.1875em;
+    border-top: 0;
+}
+.accordion-tabs li.tab-head-cont:last-child a {
+    border-bottom-left-radius: 0.1875em;
+    border-bottom-right-radius: 0.1875em; 
+}
+.accordion-tabs li.tab-head-cont a {
+    text-decoration:none;
+    border-top: 1px solid #dddddd;
+    
+    display: block;
+    color: #000000;
+    padding: 0.75em 0.809em;
+}
+.accordion-tabs li.tab-head-cont a:hover {
+    color: #000000;
+}
+.accordion-tabs li.tab-head-cont a:focus {
+    outline: none;
+}
+.accordion-tabs li.tab-head-cont a.is-active {
+    color:#333333;
+    border-left: 3px solid #000000;
+    border-bottom: 1px solid #dddddd;
+}
+.accordion-tabs li.tab-head-cont section {
+    padding: 1.5em 1.618em;
+    display: none;
+    overflow: hidden;
+    width: 100%; 
+}
+
+.accordion-tabs li.tab-head-cont a .column_icon_toggle{
+        right: 10px;
+        top: 8px;
+        position: absolute;
+    }
+
+/* RESPONSIVE */
+@media screen and (min-width: 991px) {
+    .accordion-tabs li.tab-head-cont a .column_icon_toggle{
+        display: none;
+    }
+    .accordion-tabs {
+        border: none;
+        position: relative; 
+    }
+    .accordion-tabs li.tab-head-cont {
+        display: inline; 
+    }
+    
+    .accordion-tabs li.tab-head-cont:last-child a {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    } 
+    .accordion-tabs li.tab-head-cont a {
+        display: inline-block;
+        vertical-align: baseline;
+        zoom: 1;
+        *display: inline;
+        *vertical-align: auto;
+        border-top: 0;
+        border-top-right-radius: 0.1875em;
+        border-top-left-radius: 0.1875em; 
+    } 
+    .accordion-tabs li.tab-head-cont a.is-active {
+        border: 1px solid #dddddd;
+        border-bottom: none;
+        border-top: 3px solid #000000;
+        margin-bottom: -1px; 
+    }
+    .accordion-tabs li.tab-head-cont section {
+        border-bottom-left-radius: 0.1875em;
+        border-bottom-right-radius: 0.1875em;
+        border: 1px solid #dddddd;
+        float: left;
+        left: 0;
+        padding: 0.75em 0.809em;
+    }
+    .accordion-tabs li.tab-head-cont section p {
+        -webkit-columns: 2;
+        -moz-columns: 2;
+        columns: 2;
+    }
+}
