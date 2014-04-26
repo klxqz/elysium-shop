@@ -184,12 +184,12 @@
         initFilterSlider: function() {
             if (!this.options.filter_slider) {
                 return false;
-            }
+            }            
             $('#filter-slider').slider({
                 range: true,
-                min: 0,
-                max: 100000,
-                values: [0, 100000],
+                min: this.options.filter_slider_min_value,
+                max: this.options.filter_slider_max_value,
+                values: [this.options.filter_slider_min_price, this.options.filter_slider_max_price],
                 slide: function(event, ui) {
                     var v = ui.values[0];
                     if (v == $(this).slider('option', 'min')) {

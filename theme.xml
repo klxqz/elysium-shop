@@ -172,6 +172,16 @@
             <name locale="en_US">AJAX-enabled product by-feature filtering</name>
             <name locale="ru_RU">Слайдер для цены в фильтре</name>
         </setting>
+        <setting var="filter_slider_min_value" control_type="text">
+            <value>0</value>
+            <name locale="en_US">Block photos. Photo size</name>
+            <name locale="ru_RU">Слайдер для цены в фильтре. Минимальное значение</name>
+        </setting>
+        <setting var="filter_slider_max_value" control_type="text">
+            <value>50000</value>
+            <name locale="en_US">Block photos. Photo size</name>
+            <name locale="ru_RU">Слайдер для цены в фильтре. Максимальное значение</name>
+        </setting>
         <setting var="elevate_zoom" control_type="checkbox">
             <value>1</value>
             <name locale="en_US">AJAX-enabled product by-feature filtering</name>
