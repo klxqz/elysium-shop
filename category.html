@@ -1,3 +1,10 @@
+<script type="text/javascript">
+    load_arr.push('{$wa_active_theme_url}poshytip/tip-darkgray/tip-darkgray.css');
+    load_arr.push('{$wa_active_theme_url}poshytip/jquery.poshytip.min.js');
+    complete_functions['initCompare'] = function() {
+        $.elysiumShop.initCompare();
+    };
+</script>
 {function name=sortOption}
 {if $active_sort === null}
 {$active_sort = waRequest::get('sort')}

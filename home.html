@@ -7,7 +7,7 @@
 </div>
 
 <script type="text/javascript">
-    $(window).load(function() {
+    complete_functions['nivoSlider'] = function() {
         $('#slider').nivoSlider({
             effect: 'random',
             slices: 15,
@@ -29,9 +29,8 @@
                     'min-height': '1px'
                 });
             }
-
         });
-    });
+    };
 </script>
 
 <div class="clearfix"></div>
@@ -47,10 +46,10 @@
 
 
 {if $promos}
-<section id="bestseller_home" class="block main_page_products">
-    <h4><span>Популярные товары</span></h4>
-    {include file="list-slider.html" products=$promos inline}
-</section>
+    <section id="bestseller_home" class="block main_page_products">
+        <h4><span>Популярные товары</span></h4>
+        {include file="list-slider.html" products=$promos inline}
+    </section>
 {/if}
 
 
@@ -66,8 +65,8 @@
     <meta itemprop="description" content="{$wa->meta('description')|escape}">
 
     {if $wa->shop->settings('phone')}
-    <p class="align-center large">[`Contact us`]: <strong itemprop="telephone">{$wa->shop->settings('phone')}</strong></p>
-    {/if}
+        <p class="align-center large">[`Contact us`]: <strong itemprop="telephone">{$wa->shop->settings('phone')}</strong></p>
+        {/if}
     <div itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
         <meta itemprop="streetAddress" content="">
         <meta itemprop="addressLocality" content="">
@@ -81,8 +80,8 @@
 </div>
 
 {if $bestsellers}
-<section id="bestseller_home" class="block main_page_products">
-    <h4><span>Лучшие товары</span></h4>
-    {include file="list-slider.html" products=$bestsellers inline}
-</section>
+    <section id="bestseller_home" class="block main_page_products">
+        <h4><span>Лучшие товары</span></h4>
+        {include file="list-slider.html" products=$bestsellers inline}
+    </section>
 {/if}
