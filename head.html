@@ -20,8 +20,8 @@
             remove_from_compare: '[`Remove from comparison table`]',
             filter_slider_min_value: {$theme_settings.filter_slider_min_value},
             filter_slider_max_value: {$theme_settings.filter_slider_max_value},
-            filter_slider_min_price: {if isset($smarty.get.price_min)}{$smarty.get.price_min}{else}{$theme_settings.filter_slider_min_value}{/if},
-            filter_slider_max_price: {if isset($smarty.get.price_max)}{$smarty.get.price_max}{else}{$theme_settings.filter_slider_max_value}{/if},
+            filter_slider_min_price: {if isset($smarty.get.price_min) && $smarty.get.price_min!=''}{$smarty.get.price_min}{else}{$theme_settings.filter_slider_min_value}{/if},
+            filter_slider_max_price: {if isset($smarty.get.price_max) && $smarty.get.price_max!=''}{$smarty.get.price_max}{else}{$theme_settings.filter_slider_max_value}{/if},
         });
     };
 </script>

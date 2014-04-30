@@ -1,79 +1,82 @@
 {function name=in_stock n=0 low=5 critical=2}
-{if $n > $low or $n === null}
-<strong class="stock-high"><i class="icon16 stock-green"></i>[`In stock`]</strong>
-{elseif $n > $critical}
-<strong class="stock-low"><i class="icon16 stock-yellow"></i>{_w("Only %d left in stock", "Only %d left in stock", $n)}</strong>
-{elseif $n > 0}
-<strong class="stock-critical"><i class="icon16 stock-red"></i>{_w("Only %d left in stock", "Only %d left in stock", $n)}</strong>
-{else}
-<strong class="stock-none"><i class="icon16 stock-transparent"></i>{if $wa->shop->settings('ignore_stock_count')}[`Pre-order only`]{else}[`Out of stock`]{/if}</strong>
-{/if}
+    {if $n > $low or $n === null}
+        <strong class="stock-high"><i class="icon16 stock-green"></i>[`In stock`]</strong>
+    {elseif $n > $critical}
+        <strong class="stock-low"><i class="icon16 stock-yellow"></i>{_w("Only %d left in stock", "Only %d left in stock", $n)}</strong>
+        {elseif $n > 0}
+        <strong class="stock-critical"><i class="icon16 stock-red"></i>{_w("Only %d left in stock", "Only %d left in stock", $n)}</strong>
+        {else}
+        <strong class="stock-none"><i class="icon16 stock-transparent"></i>{if $wa->shop->settings('ignore_stock_count')}[`Pre-order only`]{else}[`Out of stock`]{/if}</strong>
+    {/if}
 {/function}
 {$compare = waRequest::cookie('shop_compare', array(), waRequest::TYPE_ARRAY_INT)}
 <ul id="product_list" class="row grid product-list">
     {foreach $products as $p name=products}
-    <li itemscope itemtype ="http://schema.org/Product" class="ajax_block_product col-xs-12 col-sm-6 col-md-4 col-lg-4 {if $smarty.foreach.products.index % 3 == 0}alpha{elseif ($smarty.foreach.products.index+1) % 3 == 0}omega{/if}">
-        <div class="inner_content clearfix">
-            <a href="{$p.frontend_url}" title="{$p.name}{if $p.summary} &mdash; {strip_tags($p.summary)|escape}{/if}" class="product_img_link">
-                <div class="pic-block">
-                    {$badge_html = $wa->shop->badgeHtml($p.badge)}
-                    {if $badge_html}
-                    <div class="corner top right">{$badge_html}</div>
-                    {/if}
-                    {$wa->shop->productImgHtml($p, '200', ['itemprop' => 'image', 'alt' => $p.name, 'default' => "`$wa_theme_url`img/dummy200.png"])}
-                </div>
-                {if $p.rating > 0}
-                <span class="rating nowrap">{$wa->shop->ratingHtml($p.rating)}</span>
-                {/if}
-            </a>
-            <div class="center_block">
-                <div class="label-box">
-                </div>
-                <div class="product_flags clearfix">
-                    <span class="availability title_shop">{in_stock n=$p.count}</span>				                  
-                </div>
-                <div class="clear"></div>
-                <h5 itemprop="name">
-                    <a title="{$p.name}{if $p.summary} &mdash; {strip_tags($p.summary)|escape}{/if}" href="{$p.frontend_url}" class="product_link">{$p.name}</a>
-                </h5>
-
-
-                {if $p.summary}
-                <p class="product_desc" itemprop="description">{$p.summary}</p>
-                {/if}
-
-            </div>																				 
-            <div class="right_block" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-                <span class="price" itemprop="price">{shop_currency_html($p.price)}</span>  
-
-                <p class="compare checkbox choices-thin clearfix hidden-xs">		
-                    <input title="[`Add to comparison table`]" type="checkbox" {if in_array($p.id,$compare)}checked="checked"{/if} class="comparator" value="{$p.id}" autocomplete="off" /> 
-                           <label>
-                        {if in_array($p.id,$compare)}
-                        [`Remove from comparison table`]
-                        {else}
-                        [`Add to comparison table`]
+        <li itemscope itemtype ="http://schema.org/Product" class="ajax_block_product col-xs-12 col-sm-6 col-md-4 col-lg-4 {if $smarty.foreach.products.index % 3 == 0}alpha{elseif ($smarty.foreach.products.index+1) % 3 == 0}omega{/if}">
+            <div class="inner_content clearfix">
+                <a href="{$p.frontend_url}" title="{$p.name}{if $p.summary} &mdash; {strip_tags($p.summary)|escape}{/if}" class="product_img_link">
+                    <div class="pic-block">
+                        {$badge_html = $wa->shop->badgeHtml($p.badge)}
+                        {if $badge_html}
+                            <div class="corner top right">{$badge_html}</div>
                         {/if}
-                    </label>
-                </p>
+                        {$wa->shop->productImgHtml($p, '200', ['itemprop' => 'image', 'alt' => $p.name, 'default' => "`$wa_theme_url`img/dummy200.png"])}
+                    </div>
+                    {if $p.rating > 0}
+                        <span class="rating nowrap">{$wa->shop->ratingHtml($p.rating)}</span>
+                    {/if}
+                </a>
+                <div class="center_block">
+                    <div class="label-box">
+                    </div>
+                    <div class="product_flags clearfix">
+                        <span class="availability title_shop">{in_stock n=$p.count}</span>				                  
+                    </div>
+                    <div class="clear"></div>
+                    <h5 itemprop="name">
+                        <a title="{$p.name}{if $p.summary} &mdash; {strip_tags($p.summary)|escape}{/if}" href="{$p.frontend_url}" class="product_link">{$p.name}</a>
+                    </h5>
 
-                <div class="clear noneclass"></div>
 
-                {if $wa->shop->settings('ignore_stock_count') || $p.count === null || $p.count > 0}
-                <form class="addtocart" {if $p.sku_count > 1}data-url="{$p.frontend_url}?cart=1"{/if} method="post" action="{$wa->getUrl('/frontendCart/add')}">
-                    <input type="hidden" name="product_id" value="{$p.id}">
-                    <input type="submit" value="[`Add to cart`]" class="ajax_add_to_cart_button btn btn-default exclusive btn_add_cart">
-                    <a title="Подробнее" href="{$p.frontend_url}" class="btn btn-default button">Подробнее</a> 
-                </form>
-                <link itemprop="availability" href="http://schema.org/InStock" />
-                {else}
-                <link itemprop="availability" href="http://schema.org/OutOfStock" />
-                {/if}  
+                    {if $p.summary}
+                        <p class="product_desc" itemprop="description">{$p.summary}</p>
+                    {/if}
+
+                </div>																				 
+                <div class="right_block" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                    <span class="price" itemprop="price">{shop_currency_html($p.price)}</span>  
+
+                    <p class="compare checkbox choices-thin clearfix hidden-xs">		
+                        <input title="[`Add to comparison table`]" type="checkbox" {if in_array($p.id,$compare)}checked="checked"{/if} class="comparator" value="{$p.id}" autocomplete="off" /> 
+                        <label>
+                            {if in_array($p.id,$compare)}
+                                [`Remove from comparison table`]
+                            {else}
+                                [`Add to comparison table`]
+                            {/if}
+                        </label>
+                    </p>
+
+                    <div class="clear noneclass"></div>
+
+                    {if $wa->shop->settings('ignore_stock_count') || $p.count === null || $p.count > 0}
+                        <form data-img="{shopImage::getUrl(['id' => $p.image_id, 'product_id' => $p.id, 'ext' => $p.ext], '100x100', false)}"
+                              data-product-url="{$p.frontend_url}"
+                              data-name="{$p.name|escape}"
+                              class="addtocart" {if $p.sku_count > 1}data-url="{$p.frontend_url}?cart=1"{/if} method="post" action="{$wa->getUrl('/frontendCart/add')}">
+                            <input type="hidden" name="product_id" value="{$p.id}">
+                            <input type="submit" value="[`Add to cart`]" class="ajax_add_to_cart_button btn btn-default exclusive btn_add_cart">
+                            <a title="Подробнее" href="{$p.frontend_url}" class="btn btn-default button">Подробнее</a> 
+                        </form>
+                        <link itemprop="availability" href="http://schema.org/InStock" />
+                    {else}
+                        <link itemprop="availability" href="http://schema.org/OutOfStock" />
+                    {/if}  
 
 
+                </div>
             </div>
-        </div>
-    </li>
+        </li>
 
 
     {/foreach}
@@ -83,9 +86,9 @@
     <a {if count($compare)<2}style="display: none;"{/if} class="button btn btn-default" id="bt_compare_bottom" href="{$wa->getUrl('/frontend/compare/', ['id' => implode(',', $compare) ])}"><i class="icon-bar-chart"></i>[`Compare`]</a>
     <!-- Pagination -->
     {if isset($pages_count) && $pages_count > 1}
-    <div class="pagination lazyloading-paging" id="pagination_bottom">
-        {wa_pagination total=$pages_count attrs=['class' => "pagination"]}
-    </div>
+        <div class="pagination lazyloading-paging" id="pagination_bottom">
+            {wa_pagination total=$pages_count attrs=['class' => "pagination"]}
+        </div>
     {/if}
     <!-- /Pagination -->
 

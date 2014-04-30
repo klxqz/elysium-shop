@@ -260,13 +260,14 @@ $(function() {
         $.post(f.attr('action') + '?html=1', f.serialize(), function(response) {
             if (response.status == 'ok') {
                 var cart_total = $(".cart-total");
-                var cart_div = f.closest('.cart');
+                
                 if ($(window).scrollTop() >= 35) {
                     cart_total.closest('#cart').addClass("fixed");
                 }
                 cart_total.closest('#cart').removeClass('empty');
 
                 var clone = $('<div class="cart"></div>').append($('#cart-form').clone());
+                var cart_div = f.closest('.cart');
                 if (cart_div.closest('.dialog').length) {
                     clone.insertAfter(cart_div.closest('.dialog'));
                 } else {
@@ -288,6 +289,14 @@ $(function() {
                 }, 500, function() {
                     $(this).remove();
                     cart_total.html(response.data.total);
+                    $('#cart_block_total').html(response.data.total);
+                    var product_data = {
+                        name: f.data('name'),
+                        price: f.find('.price').html(),
+                        img: f.data('img'),
+                        url: f.data('product-url')
+                    };
+                    $.elysiumShop.addToCart(product_data, response.data);
                 });
                 if (cart_div.closest('.dialog').length) {
                     cart_div.closest('.dialog').hide().find('.cart').empty();
