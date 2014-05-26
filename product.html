@@ -316,12 +316,12 @@
                     <a href="#">Рекомендуемые товары<i class="column_icon_toggle icon-plus-sign"></i></a>
                     <section class="page_product_box">
                         {if $upselling}
-                            <h3>[`See also`]</h3>
+                            <h4>[`See also`]</h4>
                             {include file="list-slider.html" products=$upselling}
                         {/if}
 
                         {if $crossselling}
-                            <h3>{sprintf('[`Customers who bought %s also bought`]', $product.name|escape)}</h3>
+                            <h4>{sprintf('[`Customers who bought %s also bought`]', $product.name|escape)}</h4>
                             {include file="list-slider.html" products=$crossselling}
                         {/if}
                     </section>

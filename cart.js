@@ -22,8 +22,10 @@ $(function () {
         if (obj.length) {
             if ($(this).is(':checked')) {
                 obj.removeAttr('disabled');
+                obj.closest('.selector').removeClass('disabled');
             } else {
                 obj.attr('disabled', 'disabled');
+                obj.closest('.selector').addClass('disabled');
             }
         }
     });
