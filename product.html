@@ -1,13 +1,26 @@
-<script type="text/javascript">
-    {if !empty($theme_settings.elevate_zoom)}
-    load_arr.push('{$wa_active_theme_url}js/jquery.elevateZoom-3.0.8.min.js');
-    load_arr.push('{$wa_active_theme_url}fancybox/jquery.fancybox.pack.js');
-    load_arr.push('{$wa_active_theme_url}fancybox/jquery.fancybox.css');
+{if !empty($theme_settings.elevate_zoom)}
+    {if $theme_settings.use_yepnope}
+        <script type="text/javascript">
+            load_arr.push('{$wa_active_theme_url}js/jquery.elevateZoom-3.0.8.min.js');
+            load_arr.push('{$wa_active_theme_url}fancybox/jquery.fancybox.pack.js');
+            load_arr.push('{$wa_active_theme_url}fancybox/jquery.fancybox.css');
+            complete_functions['initElevateZoom'] = function() {
+                $.elysiumShop.initElevateZoom();
+            };
+        </script>
+    {else}
+        <script type="text/javascript" src="{$wa_active_theme_url}js/jquery.elevateZoom-3.0.8.min.js"></script>
+        <script type="text/javascript" src="{$wa_active_theme_url}fancybox/jquery.fancybox.pack.js"></script>
+        <link href="{$wa_active_theme_url}fancybox/jquery.fancybox.css" rel="stylesheet" type="text/css"/>
+        <script type="text/javascript">
+            $(function() {
+                $.elysiumShop.initElevateZoom();
+            });
+        </script>
     {/if}
-    complete_functions['initElevateZoom'] = function() {
-        $.elysiumShop.initElevateZoom();
-    };
-</script>
+{/if}
+
+
 <!-- product page navigation -->
 <ul class="menu-h">
     <li class="selected"><a href="{$wa->shop->productUrl($product)}">[`Overview`]</a></li>
@@ -67,7 +80,7 @@
 
             <ul id="usefull_link_block" class="clearfix" >
 
-                <li class="print"><a href="javascript:print();"><i class="icon-print"></i>Распечатать</a></li>
+                <li class="print"><a href="javascript:print();"><i class="icon-print"></i>[`Print`]</a></li>
                 <li><a  href="{$wa->shop->productUrl($product, 'reviews')}"><i class="icon-pencil"></i>[`Write a review`]</a></li>
                 <li>
                     <div class="pluso" data-background="transparent" data-options="big,square,line,horizontal,nocounter,theme=01" data-services="vkontakte,odnoklassniki,facebook,twitter,google,moimir,email"></div>
@@ -156,7 +169,7 @@
     <div class="extra-box-product">
         {if $product.description}
             <section class="page_product_box toggle_frame more_info_inner">
-                <h3 class="toggle">Больше информации<i class="icon-toggle icon-minus-sign-alt"></i></h3>
+                <h3 class="toggle">[`More information`]<i class="icon-toggle icon-minus-sign-alt"></i></h3>
                 <div class="toggle_content" itemprop="description" id="product-description">
                     {$product.description}
                 </div> 
@@ -166,7 +179,7 @@
         <!-- product features -->
         {if $product.features}
             <section class="page_product_box toggle_frame more_info_inner">
-                <h3 class="toggle">Характеристики<i class="icon-toggle icon-minus-sign-alt"></i></h3>
+                <h3 class="toggle">[`Features`]<i class="icon-toggle icon-minus-sign-alt"></i></h3>
                 <div class="toggle_content">
                     <table class="features table table-bordered table-hover" id="product-features">
                         {foreach $product.features as $f_code => $f_value}
@@ -250,7 +263,7 @@
         <ul class="accordion-tabs">
             {if $product.description}
                 <li class="tab-head-cont">
-                    <a href="#" class="is-active">Больше информации<i class="column_icon_toggle icon-plus-sign"></i></a>
+                    <a href="#" class="is-active">[`More information`]<i class="column_icon_toggle icon-plus-sign"></i></a>
                     <section itemprop="description" id="product-description">
                         {$product.description}
                     </section>
@@ -260,7 +273,7 @@
             <!-- product features -->
             {if $product.features}
                 <li class="tab-head-cont">
-                    <a href="#">Характеристики<i class="column_icon_toggle icon-plus-sign"></i></a>
+                    <a href="#">[`Features`]<i class="column_icon_toggle icon-plus-sign"></i></a>
                     <section>
                         <table class="features table table-bordered table-hover" id="product-features">
                             {foreach $product.features as $f_code => $f_value}
@@ -313,7 +326,7 @@
             {$crossselling = $product->crossSelling()}        
             {if $upselling || $crossselling}
                 <li class="tab-head-cont">
-                    <a href="#">Рекомендуемые товары<i class="column_icon_toggle icon-plus-sign"></i></a>
+                    <a href="#">[`Recommended goods`]<i class="column_icon_toggle icon-plus-sign"></i></a>
                     <section class="page_product_box">
                         {if $upselling}
                             <h4>[`See also`]</h4>

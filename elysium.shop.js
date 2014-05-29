@@ -12,7 +12,7 @@
             //this.initCompare();
         },
         initMain: function() {
-            var $self = this;
+            var self = this;
             $('#selectPrductSort option').click(function() {
                 location.assign($(this).val());
             });
@@ -94,7 +94,7 @@
                                     img: f.data('img'),
                                     url: f.data('product-url')
                                 };
-                                $self.addToCart(product_data, response.data);
+                                self.addToCart(product_data, response.data);
                             });
                         }
                         if (response.data.error) {
@@ -117,7 +117,9 @@
                         window.history.pushState({}, '', url);
                     }
                     $(window).lazyLoad && $(window).lazyLoad('reload');
-                    $(".compare .comparator").uniform();
+                    if (self.options.uniform) {
+                        $(".compare .comparator").uniform();
+                    }
                     $('ul.product_view').each(function(i) {
                         var cookie = $.cookie('tabCookie' + i);
                         if (cookie)
@@ -257,6 +259,7 @@
             });
         },
         initLazyLoading: function() {
+            var self = this;
             if (!this.options.lazyloading) {
                 return false;
             }
@@ -314,16 +317,19 @@
 
                             loading.hide();
                             tmp.remove();
-                            $(".compare .comparator").uniform();
+                            if (self.options.uniform) {
+                                $(".compare .comparator").uniform();
+                            }
+
                         });
                     }
                 });
             }
         },
         initGridList: function() {
-            var $self = this;
+            var self = this;
             $('ul.product_view').each(function(i) {
-                var cookie = $.cookie('tabCookie' + i) || $self.options.default_product_view;
+                var cookie = $.cookie('tabCookie' + i) || self.options.default_product_view;
                 if (cookie)
                     $(this).find('li').eq(cookie).addClass('current').siblings().removeClass('current')
                             .parents('#center_column').find('#product_list').addClass('list').removeClass('grid').eq(cookie).addClass('grid').removeClass('list');
@@ -349,7 +355,7 @@
                 offsetX: 0,
                 offsetY: 5
             });
-            var $self = this;
+            var self = this;
             $('.comparator').change(function() {
                 var compare = $.cookie('shop_compare');
                 if ($(this).prop('checked')) {
@@ -358,13 +364,13 @@
                     } else {
                         compare = '' + $(this).val();
                     }
-                    $(this).poshytip('update', $self.options.remove_from_compare);
+                    $(this).poshytip('update', self.options.remove_from_compare);
                     if (compare.split(',').length > 1) {
                         var url = $("#bt_compare_bottom").attr('href').replace(/compare\/.*$/, 'compare/' + compare + '/');
                         $("#bt_compare_bottom").attr('href', url).show();
                         $(this).poshytip('update', '<a style="color:#FFF; text-decoration:underline;" href="' + $("#bt_compare_bottom").attr('href') + '">Сравнить ' + compare.split(',').length + '</a>', true);
                     }
-                    $(this).closest('p').find('label').text($self.options.remove_from_compare);
+                    $(this).closest('p').find('label').text(self.options.remove_from_compare);
                     $.cookie('shop_compare', compare, {expires: 30, path: '/'});
                 } else {
                     if (compare) {
@@ -387,8 +393,8 @@
                     } else {
                         $.cookie('shop_compare', null);
                     }
-                    $(this).poshytip('update', $self.options.add_to_compare);
-                    $(this).closest('p').find('label').text($self.options.add_to_compare);
+                    $(this).poshytip('update', self.options.add_to_compare);
+                    $(this).closest('p').find('label').text(self.options.add_to_compare);
                 }
                 return false;
             });

@@ -2,29 +2,57 @@
 {if !empty($nofollow)}
     <meta name="robots" content="noindex,nofollow" />
 {/if}
-<script type="text/javascript">
-    load_arr.push('{$wa_url}wa-content/js/jquery-wa/wa.core.js');
-    load_arr.push('{$wa_active_theme_url}elysium.shop.css');
+{if $theme_settings.use_yepnope}
+    <script type="text/javascript">
+        load_arr.push('{$wa_url}wa-content/js/jquery-wa/wa.core.js');
+        load_arr.push('{$wa_active_theme_url}elysium.shop.css');
+        {if !empty($theme_settings.lazyloading)}
+        load_arr.push('{$wa_app_static_url}js/lazy.load.js');
+        {/if}
+        load_arr.push('{$wa_active_theme_url}elysium.shop.js');
+        load_arr.push('{$wa_active_theme_url}js/jquery.cookie.min.js');
+        complete_functions['initShop'] = function() {
+            $.elysiumShop.init({
+                filter_slider: {$theme_settings.filter_slider},
+                elevate_zoom: {$theme_settings.elevate_zoom},
+                lazyloading: {$theme_settings.lazyloading},
+                default_product_view: {$theme_settings.default_product_view},
+                add_to_compare: '[`Add to comparison table`]',
+                remove_from_compare: '[`Remove from comparison table`]',
+                filter_slider_min_value: {$theme_settings.filter_slider_min_value},
+                filter_slider_max_value: {$theme_settings.filter_slider_max_value},
+                filter_slider_min_price: {if isset($smarty.get.price_min) && $smarty.get.price_min!=''}{$smarty.get.price_min}{else}{$theme_settings.filter_slider_min_value}{/if},
+                filter_slider_max_price: {if isset($smarty.get.price_max) && $smarty.get.price_max!=''}{$smarty.get.price_max}{else}{$theme_settings.filter_slider_max_value}{/if},
+                uniform: {$theme_settings.uniform}
+            });
+        };
+    </script>
+{else}
+    <script type="text/javascript" src="{$wa_url}wa-content/js/jquery-wa/wa.core.js"></script>
+    <link href="{$wa_active_theme_url}elysium.shop.css" rel="stylesheet" type="text/css"/>
     {if !empty($theme_settings.lazyloading)}
-    load_arr.push('{$wa_app_static_url}js/lazy.load.js');
+        <script type="text/javascript" src="{$wa_app_static_url}js/lazy.load.js"></script>
     {/if}
-    load_arr.push('{$wa_active_theme_url}elysium.shop.js');
-    load_arr.push('{$wa_active_theme_url}js/jquery.cookie.min.js');
-    complete_functions['initShop'] = function() {
-        $.elysiumShop.init({
-            filter_slider: {$theme_settings.filter_slider},
-            elevate_zoom: {$theme_settings.elevate_zoom},
-            lazyloading: {$theme_settings.lazyloading},
-            default_product_view: {$theme_settings.default_product_view},
-            add_to_compare: '[`Add to comparison table`]',
-            remove_from_compare: '[`Remove from comparison table`]',
-            filter_slider_min_value: {$theme_settings.filter_slider_min_value},
-            filter_slider_max_value: {$theme_settings.filter_slider_max_value},
-            filter_slider_min_price: {if isset($smarty.get.price_min) && $smarty.get.price_min!=''}{$smarty.get.price_min}{else}{$theme_settings.filter_slider_min_value}{/if},
-            filter_slider_max_price: {if isset($smarty.get.price_max) && $smarty.get.price_max!=''}{$smarty.get.price_max}{else}{$theme_settings.filter_slider_max_value}{/if},
+    <script type="text/javascript" src="{$wa_active_theme_url}elysium.shop.js"></script>
+    <script type="text/javascript" src="{$wa_active_theme_url}js/jquery.cookie.min.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            $.elysiumShop.init({
+                filter_slider: {$theme_settings.filter_slider},
+                elevate_zoom: {$theme_settings.elevate_zoom},
+                lazyloading: {$theme_settings.lazyloading},
+                default_product_view: {$theme_settings.default_product_view},
+                add_to_compare: '[`Add to comparison table`]',
+                remove_from_compare: '[`Remove from comparison table`]',
+                filter_slider_min_value: {$theme_settings.filter_slider_min_value},
+                filter_slider_max_value: {$theme_settings.filter_slider_max_value},
+                filter_slider_min_price: {if isset($smarty.get.price_min) && $smarty.get.price_min!=''}{$smarty.get.price_min}{else}{$theme_settings.filter_slider_min_value}{/if},
+                filter_slider_max_price: {if isset($smarty.get.price_max) && $smarty.get.price_max!=''}{$smarty.get.price_max}{else}{$theme_settings.filter_slider_max_value}{/if},
+                uniform: {$theme_settings.uniform}
+            });
         });
-    };
-</script>
+    </script>
+{/if}
 <!-- plugin hook: 'frontend_head' -->
 {* @event frontend_head.%plugin_id% *}
 {foreach $frontend_head as $_}{$_}{/foreach}

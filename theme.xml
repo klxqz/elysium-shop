@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE theme PUBLIC "wa-app-theme" "http://www.webasyst.com/wa-content/xml/wa-app-theme.dtd">
-<theme id="elysium" system="0" vendor="webasyst" author="Webasyst" app="shop" parent_theme_id="site:elysium" version="1.1.1">
+<theme id="elysium" system="0" vendor="985310" author="wa-plugins.ru" app="shop" parent_theme_id="site:elysium" version="1.0.0">
     <name locale="en_US">Elysium</name>
-    <name locale="ru_RU">Elysium</name>
+    <name locale="ru_RU">"Элизиум</name>
     <files>
         <file path="index.html" custom="0" parent="1">
         </file>
@@ -241,4 +241,43 @@
 
 ]]>
     </about>
+    
+    <locales>
+        <locale>
+            <msgid>Subcategories</msgid>
+            <msgstr locale="ru_RU">Подкатегории</msgstr>
+        </locale>
+        <locale>
+            <msgid>Popular products</msgid>
+            <msgstr locale="ru_RU">Популярные товары</msgstr>
+        </locale>
+        <locale>
+            <msgid>Best sellers</msgid>
+            <msgstr locale="ru_RU">Лучшие товары</msgstr>
+        </locale>
+        <locale>
+            <msgid>More</msgid>
+            <msgstr locale="ru_RU">Подробнее</msgstr>
+        </locale>
+        <locale>
+            <msgid>Quantity</msgid>
+            <msgstr locale="ru_RU">Количество</msgstr>
+        </locale>
+        <locale>
+            <msgid>Print</msgid>
+            <msgstr locale="ru_RU">Распечатать</msgstr>
+        </locale>
+        <locale>
+            <msgid>More information</msgid>
+            <msgstr locale="ru_RU">Больше информации</msgstr>
+        </locale>
+        <locale>
+            <msgid>Features</msgid>
+            <msgstr locale="ru_RU">Характеристики</msgstr>
+        </locale>
+        <locale>
+            <msgid>Recommended goods</msgid>
+            <msgstr locale="ru_RU">Рекомендуемые товары</msgstr>
+        </locale>
+    </locales>
 </theme>

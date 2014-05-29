@@ -66,7 +66,7 @@
                               class="addtocart" {if $p.sku_count > 1}data-url="{$p.frontend_url}?cart=1"{/if} method="post" action="{$wa->getUrl('/frontendCart/add')}">
                             <input type="hidden" name="product_id" value="{$p.id}">
                             <input type="submit" value="[`Add to cart`]" class="ajax_add_to_cart_button btn btn-default exclusive btn_add_cart">
-                            <a title="Подробнее" href="{$p.frontend_url}" class="btn btn-default button">Подробнее</a> 
+                            <a title="[`More`]" href="{$p.frontend_url}" class="btn btn-default button">[`More`]</a> 
                         </form>
                         <link itemprop="availability" href="http://schema.org/InStock" />
                     {else}

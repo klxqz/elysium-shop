@@ -1,32 +1,42 @@
-<script type="text/javascript">
-    load_arr.push('{$wa_active_theme_url}poshytip/tip-darkgray/tip-darkgray.css');
-    load_arr.push('{$wa_active_theme_url}poshytip/jquery.poshytip.min.js');
-    complete_functions['initCompare'] = function() {
-        $.elysiumShop.initCompare();
-    };
-</script>
+{if $theme_settings.use_yepnope}
+    <script type="text/javascript">
+        load_arr.push('{$wa_active_theme_url}poshytip/tip-darkgray/tip-darkgray.css');
+        load_arr.push('{$wa_active_theme_url}poshytip/jquery.poshytip.min.js');
+        complete_functions['initCompare'] = function() {
+            $.elysiumShop.initCompare();
+        };
+    </script>
+{else}
+    <link href="{$wa_active_theme_url}poshytip/tip-darkgray/tip-darkgray.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="{$wa_active_theme_url}poshytip/jquery.poshytip.min.js"></script>
+    <script type="text/javascript">
+        $(function() {
+            $.elysiumShop.initCompare();
+        });
+    </script>
+{/if}
 {function name=sortOption}
-{if $active_sort === null}
-{$active_sort = waRequest::get('sort')}
-{/if}
+    {if $active_sort === null}
+        {$active_sort = waRequest::get('sort')}
+    {/if}
 
-{$inverted = in_array($sort, array('rating', 'create_datetime', 'total_sales', 'count', 'stock'))}
-{$data = waRequest::get()}
-{$data['sort'] = $sort}
-{if $sort == $active_sort}
-{if waRequest::get('order') == 'asc'}
-{$data['order'] = 'desc'}
-{else}
-{$data['order'] = 'asc'}
-{/if}
-{else}
-{if $inverted}
-{$data['order'] = 'desc'}
-{else}
-{$data['order'] = 'asc'}
-{/if}
-{/if}
-<option value="?{http_build_query($data)}" {if $active_sort == $sort}selected="selected"{/if}>{$name} {if $active_sort == $sort}{if $data['order'] == 'asc'}&uarr;{else}&darr;{/if}{/if}</option>
+    {$inverted = in_array($sort, array('rating', 'create_datetime', 'total_sales', 'count', 'stock'))}
+    {$data = waRequest::get()}
+    {$data['sort'] = $sort}
+    {if $sort == $active_sort}
+        {if waRequest::get('order') == 'asc'}
+            {$data['order'] = 'desc'}
+        {else}
+            {$data['order'] = 'asc'}
+        {/if}
+    {else}
+        {if $inverted}
+            {$data['order'] = 'desc'}
+        {else}
+            {$data['order'] = 'asc'}
+        {/if}
+    {/if}
+    <option value="?{http_build_query($data)}" {if $active_sort == $sort}selected="selected"{/if}>{$name} {if $active_sort == $sort}{if $data['order'] == 'asc'}&uarr;{else}&darr;{/if}{/if}</option>
 {/function}
 
 <h1 class="category-name">
@@ -40,21 +50,21 @@
 
 <!-- description -->
 {if $category.description}
-<div class="row_category clearfix">{$category.description}</div>
+    <div class="row_category clearfix">{$category.description}</div>
 {/if}
 
 <!-- subcategories -->
 {if $category.subcategories}
-<div class="titled_box" id="subcategories">
-    <h2>Подкатегории</h2>
-    <ul class="row">
-        {foreach $category.subcategories as $sc}
-        <li class="categories_box col-xs-4 col-sm-3 col-md-3 col-lg-2">
-            <a title="Lorem ipsum dolor sit amet" href="{$sc.url}" class="lnk_more_sub"><i class="icon-caret-right "></i>{$sc.name|escape}</a>
-        </li>
-        {/foreach}
-    </ul>
-</div>
+    <div class="titled_box" id="subcategories">
+        <h2>[`Subcategories`]</h2>
+        <ul class="row">
+            {foreach $category.subcategories as $sc}
+                <li class="categories_box col-xs-4 col-sm-3 col-md-3 col-lg-2">
+                    <a title="Lorem ipsum dolor sit amet" href="{$sc.url}" class="lnk_more_sub"><i class="icon-caret-right "></i>{$sc.name|escape}</a>
+                </li>
+            {/foreach}
+        </ul>
+    </div>
 {/if}
 
 
@@ -70,62 +80,62 @@
 
     {$sorting=!empty($category.params.enable_sorting)}
     {if !empty($sorting)}
-    <!-- sorting -->
-    {$sort_fields = ['rating' => '[`Customer rating`]', 'total_sales' => '[`Bestsellers`]', 'price' => '[`Price`]', 'name' => '[`Name`]', 'create_datetime'=>'[`Date added`]', 'stock' => '[`In stock`]']}
-    {if !isset($active_sort)}
-    {$active_sort = $wa->get('sort', 'create_datetime')}
-    {/if}
-    <div id="productsSortForm" class="nbrItemPage productsSortForm">
-        <label for="selectPrductSort">[`Sort by`]</label>
+        <!-- sorting -->
+        {$sort_fields = ['rating' => '[`Customer rating`]', 'total_sales' => '[`Bestsellers`]', 'price' => '[`Price`]', 'name' => '[`Name`]', 'create_datetime'=>'[`Date added`]', 'stock' => '[`In stock`]']}
+        {if !isset($active_sort)}
+            {$active_sort = $wa->get('sort', 'create_datetime')}
+        {/if}
+        <div id="productsSortForm" class="nbrItemPage productsSortForm">
+            <label for="selectPrductSort">[`Sort by`]</label>
 
-        <select id="selectPrductSort" class="selectProductSort">
-            {if !empty($category) && !$category.sort_products}
-            <option value="{$wa->currentUrl(0, 1)}" {if !$active_sort} selected="selected"{/if} >[`New & Popular`]</option>
-            {/if}
-            {foreach $sort_fields as $sort => $name}
-            {$params = ['sort' => $sort, 'name' => $name, 'active_sort' => $active_sort]}
-            {sortOption $params}
-            {if $wa->get('sort') == $sort}{$wa->title( $wa->title()|cat:' — '|cat:$name)}{/if}
+            <select id="selectPrductSort" class="selectProductSort">
+                {if !empty($category) && !$category.sort_products}
+                    <option value="{$wa->currentUrl(0, 1)}" {if !$active_sort} selected="selected"{/if} >[`New & Popular`]</option>
+                {/if}
+                {foreach $sort_fields as $sort => $name}
+                    {$params = ['sort' => $sort, 'name' => $name, 'active_sort' => $active_sort]}
+                    {sortOption $params}
+                {if $wa->get('sort') == $sort}{$wa->title( $wa->title()|cat:' — '|cat:$name)}{/if}
             {/foreach}
         </select>
     </div>
-    {/if}
+{/if}
 
 
-    <!-- /Sort products -->
+<!-- /Sort products -->
 
 
-    <!-- nbr product/page -->
-    <div class="nbrItemPage nbr_page">
-        {$products_pers = array(6,10,20,50,100)}
-        <label for="nb_item">Показать:</label>
-        <select name="n" id="nb_item" class="js-nb_item nb_item">
-            {if isset($smarty.cookies.products_per_page)}
+<!-- nbr product/page -->
+<div class="nbrItemPage nbr_page">
+    {$products_pers = array(6,10,20,50,100)}
+    <label for="nb_item">[`Show`]:</label>
+    <select name="n" id="nb_item" class="js-nb_item nb_item">
+        {if isset($smarty.cookies.products_per_page)}
             {$products_per_page = $smarty.cookies.products_per_page}
-            {else}
+        {else}
             {$products_per_page = 50}
-            {/if}
-            {foreach $products_pers as $products_per}
+        {/if}
+        {foreach $products_pers as $products_per}
             <option value="{$products_per}" {if $products_per_page  == $products_per}selected="selected"{/if} >{$products_per}</option>
-            {/foreach}
-        </select>
-    </div>
-    <!-- /nbr product/page -->
+        {/foreach}
+    </select>
+</div>
+<!-- /nbr product/page -->
 
 </div>
 
 <div id="product-list">
     {if !$products}
-    {if !empty($filters)}
-    [`No products were found.`]
+        {if !empty($filters)}
+            [`No products were found.`]
+        {else}
+            [`This category does not contain any products.`]
+        {/if}
     {else}
-    [`This category does not contain any products.`]
-    {/if}
-    {else}
-    {include file='list-thumbs.html' sorting=!empty($category.params.enable_sorting)}
-    {*
-    or use the line below to change product list view
-    {include file='list-table.html' sorting=!empty($category.params.enable_sorting)}
-    *}
+        {include file='list-thumbs.html' sorting=!empty($category.params.enable_sorting)}
+        {*
+        or use the line below to change product list view
+        {include file='list-table.html' sorting=!empty($category.params.enable_sorting)}
+        *}
     {/if}
 </div>

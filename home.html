@@ -35,11 +35,6 @@
 
 <div class="clearfix"></div>
 
-
-
-
-
-
 <!-- get products from predefined product lists 'promo' and 'bestsellers' -->
 {$promos = $wa->shop->productSet('promo')}
 {$bestsellers = $wa->shop->productSet('bestsellers')}
@@ -47,7 +42,7 @@
 
 {if $promos}
     <section id="bestseller_home" class="block main_page_products">
-        <h4><span>Популярные товары</span></h4>
+        <h4><span>[`Popular products`]</span></h4>
         {include file="list-slider.html" products=$promos inline}
     </section>
 {/if}
@@ -81,7 +76,7 @@
 
 {if $bestsellers}
     <section id="bestseller_home" class="block main_page_products">
-        <h4><span>Лучшие товары</span></h4>
+        <h4><span>[`Best sellers`]</span></h4>
         {include file="list-slider.html" products=$bestsellers inline}
     </section>
 {/if}

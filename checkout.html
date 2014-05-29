@@ -1,13 +1,4 @@
 <h1><span>Оформление заказа</span></h1>
-
-<div class="checkout-header">
-    <div class="float-right large">
-        {$cart_total = $wa->shop->cart->total()}
-        [`Order total`]: <strong>{shop_currency_html($cart_total, true)}</strong>
-    </div>
-    <h3><a href="{$wa_app_url}">{$wa->shop->settings("name")}</a></h3>
-</div>
-
 <div class="checkout">
 
     {if isset($checkout_steps)}
