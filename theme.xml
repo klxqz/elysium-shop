@@ -232,6 +232,10 @@
             <msgstr locale="ru_RU">Подкатегории</msgstr>
         </locale>
         <locale>
+            <msgid>Show</msgid>
+            <msgstr locale="ru_RU">Показать</msgstr>
+        </locale>
+        <locale>
             <msgid>Popular products</msgid>
             <msgstr locale="ru_RU">Популярные товары</msgstr>
         </locale>
