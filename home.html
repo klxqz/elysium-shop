@@ -1,8 +1,8 @@
 <div  class="theme-default">
     <div id="slider" class="nivoSlider" style="min-height:360px;margin-bottom:0;">
-        <a href="#" > <img src="{$wa_theme_url}slider/slide-1.jpg"  class="slider_image"/>
-        </a> <a href="#" > <img src="{$wa_theme_url}slider/slide-2.jpg"  class="slider_image"/>
-        </a> <a href="#" > <img src="{$wa_theme_url}slider/slide-3.jpg"  class="slider_image"/>
+        <a href="#" > <img src="{$wa_theme_url}slider/slide-1.jpg"  class="slider_image" alt=""/>
+        </a> <a href="#" > <img src="{$wa_theme_url}slider/slide-2.jpg"  class="slider_image" alt="" />
+        </a> <a href="#" > <img src="{$wa_theme_url}slider/slide-3.jpg"  class="slider_image"alt="" />
         </a> </div>
 </div>
 
@@ -41,7 +41,7 @@
 
 
 {if $promos}
-    <section id="bestseller_home" class="block main_page_products">
+    <section id="popular_home" class="block main_page_products">
         <h4><span>[`Popular products`]</span></h4>
         {include file="list-slider.html" products=$promos inline}
     </section>
