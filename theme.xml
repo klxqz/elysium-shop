@@ -2,7 +2,7 @@
 <!DOCTYPE theme PUBLIC "wa-app-theme" "http://www.webasyst.com/wa-content/xml/wa-app-theme.dtd">
 <theme id="elysium" system="0" vendor="985310" author="wa-plugins.ru" app="shop" parent_theme_id="site:elysium" version="1.0.0">
     <name locale="en_US">Elysium</name>
-    <name locale="ru_RU">"Элизиум</name>
+    <name locale="ru_RU">Элизиум</name>
     <files>
         <file path="index.html" custom="0" parent="1">
         </file>
