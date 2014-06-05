@@ -188,7 +188,7 @@
             <name locale="ru_RU">elevateZoom(Лупа) эффект лупы в карточке товаров</name>
         </setting>
         <setting var="lazyloading" control_type="checkbox">
-            <value>0</value>
+            <value>1</value>
             <name locale="en_US">AJAX-enabled product by-feature filtering</name>
             <name locale="ru_RU">Lazy loading(«Ленивая загрузка») загрузка контента каталога «на лету» без использования постраничной навигации</name>
         </setting>

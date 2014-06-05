@@ -120,7 +120,7 @@ table.features tr.divider td{border-bottom:1px solid #ccc;padding-bottom:0;paddi
 .checkout-header h3 a{color:#777;text-decoration:none;text-transform:uppercase;}
 .checkout-header h3 a:hover{color:#a00!important;}
 .checkout-header strong{color:#666;}
-.checkout{border-top:1px solid #888;box-shadow:0 5px 10px rgba(0,0,0,.2);margin:20px 70px 50px;}
+.checkout{border-top:1px solid #888;box-shadow:0 5px 10px rgba(0,0,0,.2);}
 .checkout ul.checkout-options{padding-left:25px;}
 .checkout ul.checkout-options li{clear:both;list-style:none;margin-bottom:50px;position:relative;}
 .checkout ul.checkout-options li h3{font-weight:700;margin-bottom:10px;}
@@ -138,7 +138,7 @@ table.features tr.divider td{border-bottom:1px solid #ccc;padding-bottom:0;paddi
 .checkout .checkout-result .wa-form{float:none;margin:10px auto 20px;text-align:left;width:400px;}
 .checkout .checkout-result .back{margin-top:50px;}
 .checkout .checkout-step{border:1px solid #888;border-top:0;padding:0;}
-.checkout .checkout-step h2{background:#eee;font-weight:700;margin:0;padding:17px 20px 15px;text-transform:uppercase;}
+.checkout .checkout-step h2{background:#eee;font-weight:700;font-size:16px;margin:0;padding:17px 20px 15px;text-transform:uppercase;}
 .checkout .checkout-step h2 a{color:#000;text-decoration:none;}
 .checkout .checkout-step h2 a:hover{text-decoration:underline;}
 .checkout .checkout-step h2.upcoming a:hover{color:#000!important;cursor:default;}
@@ -210,7 +210,8 @@ h1 .order-status{font-size:.75em;margin-left:10px;}
 .icon16.loading{background-image:url(img/loading16.gif);background-position:0 0;}
 .dialog{display:none;z-index:9999;}
 .dialog-background{background:#fff;bottom:0;filter:alpha(opacity=80);left:0;opacity:.8;position:fixed;right:0;top:0;z-index:99;}
-.dialog-window .cart{background:#eee;bottom:15%;box-shadow:0 3px 15px #ddd;left:0;margin:0 auto;opacity:1;overflow-x:hidden;padding:25px;position:fixed;right:0;text-align:left;top:15%;width:500px;z-index:9999;}
+.dialog-window .cart{background:#eee;bottom:15%;box-shadow:0 3px 15px #ddd;left:0;margin:0 auto;opacity:1;overflow-x:hidden;padding:25px;position:fixed;right:0;text-align:left;top:15%;width:330px;z-index:9999;}
+.dialog-window .cart #quantity_wanted_p{margin-top:20px;padding-right:0px;}
 .dialog-window .cart .added2cart{font-size:1.1em;font-style:italic;}
 .dialog-window .dialog-close{color:#5a5;float:right;font-size:200%;margin-top:-3px;text-decoration:none;}
 .container-tab{margin:auto;max-width:800px;padding:0 20px;}

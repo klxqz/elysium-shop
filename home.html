@@ -2,11 +2,12 @@
     <div id="slider" class="nivoSlider" style="min-height:360px;margin-bottom:0;">
         <a href="#" > <img src="{$wa_theme_url}slider/slide-1.jpg"  class="slider_image" alt=""/>
         </a> <a href="#" > <img src="{$wa_theme_url}slider/slide-2.jpg"  class="slider_image" alt="" />
-        </a> <a href="#" > <img src="{$wa_theme_url}slider/slide-3.jpg"  class="slider_image"alt="" />
+        </a> <a href="#" > <img src="{$wa_theme_url}slider/slide-3.jpg"  class="slider_image" alt="" />
         </a> </div>
 </div>
 
 <script type="text/javascript">
+    {if $theme_settings.use_yepnope}
     complete_functions['nivoSlider'] = function() {
         $('#slider').nivoSlider({
             effect: 'random',
@@ -31,6 +32,30 @@
             }
         });
     };
+    {else}
+    $('#slider').nivoSlider({
+        effect: 'random',
+        slices: 15,
+        boxCols: 8,
+        boxRows: 4,
+        animSpeed: 500,
+        pauseTime: 3000,
+        startSlide: 0,
+        directionNav: true,
+        controlNav: false,
+        controlNavThumbs: false,
+        pauseOnHover: true,
+        manualAdvance: false,
+        prevText: 'Prev',
+        nextText: 'Next',
+        randomStart: false,
+        afterLoad: function() {
+            $('#slider').css({
+                'min-height': '1px'
+            });
+        }
+    });
+    {/if}
 </script>
 
 <div class="clearfix"></div>
